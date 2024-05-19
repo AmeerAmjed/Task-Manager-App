@@ -41,3 +41,8 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Ensure generated mock files are not ignored
+!test/**/*.mocks.dart
+*g.dart
+*mocks.dart
