@@ -33,4 +33,35 @@ void main() {
       expect(result, UserNameValidateState.valid);
     });
   });
+
+  group('checkValidatePassword', () {
+    test('should return PasswordValidateState.empty when password is null', () {
+      var password = null;
+
+      var result = inputValidation.checkValidatePassword(password);
+
+      expect(result, PasswordValidateState.empty);
+    });
+
+    test('should return PasswordValidateState.empty when password is empty', () {
+      var password = "";
+      var result = inputValidation.checkValidatePassword(password);
+
+      expect(result, PasswordValidateState.empty);
+    });
+
+    test('should return PasswordValidateState.short when password is too short', () {
+      var password = "short";
+      var result = inputValidation.checkValidatePassword(password);
+
+      expect(result, PasswordValidateState.short);
+    });
+
+    test('should return PasswordValidateState.valid when password is valid', () {
+      var password = "validPass123!";
+      var result = inputValidation.checkValidatePassword(password);
+
+      expect(result, PasswordValidateState.valid);
+    });
+  });
 }
