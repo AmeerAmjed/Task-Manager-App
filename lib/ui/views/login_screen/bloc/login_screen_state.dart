@@ -8,3 +8,7 @@ abstract class LoginScreenState extends Equatable {
 }
 
 class LoginScreenInitial extends LoginScreenState {}
+
+class IsLoginSuccess extends LoginScreenState {}
+
+class IsLoginFailure extends LoginScreenState {}
