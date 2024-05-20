@@ -4,10 +4,12 @@ class LightThemeApp extends ColorSystem {
   ThemeData theme() {
     return ThemeData(
         brightness: Brightness.light,
-        colorScheme: ColorScheme(
-          brightness: Brightness.light,
-          background: lightBackground,
-          onBackground: lightOnBackground,
+      useMaterial3: true,
+      fontFamily: GoogleFonts.urbanist().fontFamily,
+      colorScheme: ColorScheme(
+        brightness: Brightness.light,
+        background: lightBackground,
+        onBackground: lightOnBackground,
           primary: lightPrimary,
           onPrimary: lightOnPrimary,
           secondary: lightSecondary,
@@ -17,12 +19,25 @@ class LightThemeApp extends ColorSystem {
           surface: lightSurface,
           onSurface: lightOnSurface,
         ),
-        checkboxTheme: const CheckboxThemeData(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(4),
+      appBarTheme: AppBarTheme(
+          backgroundColor: lightBackground,
+          systemOverlayStyle: SystemUiOverlayStyle(
+            systemNavigationBarColor: lightBackground,
+            statusBarColor: lightBackground,
+          )),
+      checkboxTheme: const CheckboxThemeData(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(4),
             ),
           ),
-        ));
+      ),
+      textTheme: const TextTheme(
+        titleMedium: TextStyle(
+          fontSize: Dimens.fontSize20,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
   }
 }

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:task_manager/ui/utils/assets.dart';
+import 'package:task_manager/ui/utils/dimens.dart';
 import 'package:task_manager/ui/views/home_screen/bloc/home_screen_bloc.dart';
+import 'package:task_manager/ui/views/home_screen/widget/home_app_bar.dart';
 import 'package:task_manager/ui/views/home_screen/widget/todos_view.dart';
 import 'package:task_manager/ui/widget/error_view.dart';
 import 'package:task_manager/ui/widget/loading.dart';
@@ -11,6 +14,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: const HomeAppBar(),
       body: BlocBuilder<HomeScreenBloc, HomeScreenState>(
           builder: (BuildContext context, state) {
         if (state is LoadingState) {
