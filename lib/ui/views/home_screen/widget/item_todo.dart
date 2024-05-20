@@ -15,10 +15,13 @@ class ItemTodo extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 8),
       child: ListTile(
         title: Text(todo.title),
-        leading: Checkbox(
-          activeColor: Colors.lightBlueAccent,
-          value: todo.isCompleted,
-          onChanged: (bool? value) {},
+        leading: Transform.scale(
+          scale: 1.5,
+          child: Checkbox(
+            activeColor: Theme.of(context).colorScheme.primary,
+            value: todo.isCompleted,
+            onChanged: (bool? value) {},
+          ),
         ),
         trailing: IconButton(
           iconSize: 30,
@@ -29,6 +32,7 @@ class ItemTodo extends StatelessWidget {
           icon: const Icon(Icons.more_horiz),
           onPressed: () {},
         ),
+        tileColor: Theme.of(context).colorScheme.surface,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(
             Radius.circular(16),

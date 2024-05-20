@@ -21,7 +21,7 @@ class ToDoApp extends StatelessWidget {
           HomeScreenBloc(todoUsease: TodoUsease())..add(GetTodosEvent()),
       child: MaterialApp(
         title: 'Task Manager',
-        theme: ThemeApp.dark,
+        theme: ThemeApp().light,
         home: const HomeScreen(),
       ),
     );
