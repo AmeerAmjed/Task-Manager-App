@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_manager/ui/utils/dimens.dart';
 import 'package:task_manager/ui/utils/input_validation.dart';
 import 'package:task_manager/ui/views/login_screen/bloc/login_screen_bloc.dart';
+import 'package:task_manager/ui/widget/loading.dart';
 import 'package:task_manager/ui/widget/vertical_space.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -65,8 +66,7 @@ class LoginScreen extends StatelessWidget {
                       );
                     } else if (state is IsLoginFailure) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                            content: Text('Form Submission Failed!')),
+                        SnackBar(content: Text(state.message)),
                       );
                     }
                   },
@@ -77,11 +77,20 @@ class LoginScreen extends StatelessWidget {
                         vertical: Dimens.spacing16,
                       ),
                       child: ElevatedButton(
-                        child: const Text('Submit'),
-                        onPressed: () {
-                          BlocProvider.of<LoginScreenBloc>(context)
-                              .add(Submitted());
-                        },
+                        onPressed: state is LoadingState
+                            ? null
+                            : () {
+                                BlocProvider.of<LoginScreenBloc>(context)
+                                    .add(Submitted());
+                              },
+                        child: BlocBuilder<LoginScreenBloc, LoginScreenState>(
+                            builder: (BuildContext context, state) {
+                          if (state is LoadingState) {
+                            return const Loading();
+                          }
+
+                          return const Text('Submit');
+                        }),
                       ),
                     );
                   },

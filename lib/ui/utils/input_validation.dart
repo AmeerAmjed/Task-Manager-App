@@ -13,7 +13,7 @@ mixin class InputValidation {
   PasswordValidateState checkValidatePassword(String? value) {
     if (value == null || value.isEmpty) {
       return PasswordValidateState.empty;
-    } else if (value.trim().length <= 7) {
+    } else if (value.trim().length < 7) {
       return PasswordValidateState.short;
     }
     return PasswordValidateState.valid;

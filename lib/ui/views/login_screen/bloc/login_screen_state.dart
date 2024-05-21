@@ -9,6 +9,12 @@ abstract class LoginScreenState extends Equatable {
 
 class LoginScreenInitial extends LoginScreenState {}
 
+class LoadingState extends LoginScreenState {}
+
 class IsLoginSuccess extends LoginScreenState {}
 
-class IsLoginFailure extends LoginScreenState {}
+class IsLoginFailure extends LoginScreenState {
+  final String message;
+
+  const IsLoginFailure(this.message);
+}
