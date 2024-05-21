@@ -23,7 +23,7 @@ class ApiAuthenticationServiceImpl extends ApiAuthenticationService
     try {
       final response = await client.post(
         '$baseUrl/auth/login',
-        data: {"username": username, "password": username},
+        data: {"username": username, "password": password},
       );
 
       if (response.statusCode == 200) {
