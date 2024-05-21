@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:task_manager/ui/route/routes_screen.dart';
 import 'package:task_manager/ui/utils/dimens.dart';
 import 'package:task_manager/ui/utils/input_validation.dart';
 import 'package:task_manager/ui/views/login_screen/bloc/login_screen_bloc.dart';
@@ -60,6 +61,7 @@ class LoginScreen extends StatelessWidget {
                 BlocConsumer<LoginScreenBloc, LoginScreenState>(
                   listener: (context, state) {
                     if (state is IsLoginSuccess) {
+                      Navigator.popAndPushNamed(context, RoutesScreen.home);
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                             content: Text('Form Submitted Successfully!')),
