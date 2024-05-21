@@ -1,5 +1,5 @@
 class UserModel {
-  final int id;
+  final int userId;
   final String username;
   final String email;
   final String firstName;
@@ -8,7 +8,7 @@ class UserModel {
   final String avatar;
 
   const UserModel({
-    required this.id,
+    required this.userId,
     required this.username,
     required this.email,
     required this.firstName,

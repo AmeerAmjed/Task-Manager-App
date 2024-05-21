@@ -1,3 +1,4 @@
+import 'package:task_manager/domain/model/user_model.dart';
 import 'package:task_manager/domain/repository/authentication_repository.dart';
 
 class UserUsecase {
@@ -12,5 +13,9 @@ class UserUsecase {
     return await _repo
         .login(username: username, password: password)
         .then((value) => true);
+  }
+
+  Future<UserModel> getUser(){
+    return _repo.getUser();
   }
 }

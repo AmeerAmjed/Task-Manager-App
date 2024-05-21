@@ -1,5 +1,11 @@
+import 'package:flutter/cupertino.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:task_manager/data/local/entity/base_entity.dart';
 
+part 'user_entity.g.dart';
+
+@immutable
+@JsonSerializable()
 class UserEntity extends BaseEntity {
   UserEntity({
     this.id = 0,
@@ -23,14 +29,10 @@ class UserEntity extends BaseEntity {
   final String avatar;
 
   @override
-  Map<String, dynamic> toMap() => {
-        'id': id,
-        'userId': userId,
-        'username': username,
-        'email': email,
-        'firstName': firstName,
-        'lastName': lastName,
-        'gender': gender,
-        'avatar': avatar,
-      };
+  Map<String, dynamic> toMap() => _$UserEntityToJson(this);
+
+  factory UserEntity.fromJson(Map<String, dynamic> json) =>
+      _$UserEntityFromJson(json);
+
+  Map<String, dynamic> toJson() => _$UserEntityToJson(this);
 }

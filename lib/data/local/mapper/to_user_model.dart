@@ -1,16 +1,16 @@
-import 'package:task_manager/data/remote/response/login_response.dart';
+import 'package:task_manager/data/local/entity/user_entity.dart';
 import 'package:task_manager/domain/model/user_model.dart';
 
-extension UserModelExtension on LoginResponse {
+extension ToUserModelExtension on UserEntity {
   UserModel toUserModel() {
     return UserModel(
-      userId: id,
+      userId: userId,
       username: username,
       email: email,
       firstName: firstName,
       lastName: lastName,
       gender: gender,
-      avatar: image,
+      avatar: avatar,
     );
   }
 }
