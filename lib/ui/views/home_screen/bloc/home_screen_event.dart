@@ -8,11 +8,6 @@ abstract class HomeScreenEvent extends Equatable {
 
 class GetTodosEvent extends HomeScreenEvent {}
 
-class CheckIfNeedMoreDataEvent extends HomeScreenEvent {
-  final int index;
-
-  const CheckIfNeedMoreDataEvent({required this.index});
-
-  @override
-  List<Object?> get props => [index];
+class CheckMoreTodoRequiredEvent extends HomeScreenEvent {
+  const CheckMoreTodoRequiredEvent();
 }

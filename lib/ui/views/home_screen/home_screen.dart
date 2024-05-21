@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:task_manager/ui/utils/assets.dart';
-import 'package:task_manager/ui/utils/dimens.dart';
 import 'package:task_manager/ui/views/home_screen/bloc/home_screen_bloc.dart';
 import 'package:task_manager/ui/views/home_screen/widget/home_app_bar.dart';
 import 'package:task_manager/ui/views/home_screen/widget/todos_view.dart';
@@ -17,22 +15,19 @@ class HomeScreen extends StatelessWidget {
       appBar: const HomeAppBar(),
       body: BlocBuilder<HomeScreenBloc, HomeScreenState>(
           builder: (BuildContext context, state) {
-        if (state is LoadingState) {
-          return const Loading();
+        if (context.read<HomeScreenBloc>().todo.isEmpty) {
+          if (state is LoadingState) {
+            return const Loading();
+          } else if (state is ErrorState) {
+            return ErrorView(
+              message: state.message,
+              onPressed: () {},
+            );
+          }
         }
-        if (state is SucceedGetDataState) {
-          return TodosView(
-            todos: state.todos,
-          );
-        }
-
-        if (state is ErrorState) {
-          return ErrorView(
-            message: state.message,
-            onPressed: () {},
-          );
-        }
-        return Container();
+            return TodosView(
+          state: state,
+        );
       }),
     );
   }
