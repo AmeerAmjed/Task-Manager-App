@@ -1,9 +1,9 @@
 import 'package:task_manager/domain/repository/authentication_repository.dart';
 
-class AuthenticationUsecase {
+class UserUsecase {
   final AuthenticationRepository _repo;
 
-  AuthenticationUsecase(this._repo);
+  UserUsecase(this._repo);
 
   Future<bool> login({
     required String username,

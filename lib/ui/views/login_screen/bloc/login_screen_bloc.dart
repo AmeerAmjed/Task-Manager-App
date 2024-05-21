@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_manager/di/get_it.dart';
-import 'package:task_manager/domain/usecase/authentication_usecase.dart';
+import 'package:task_manager/domain/usecase/user_usecase.dart';
 import 'package:task_manager/ui/utils/input_validation.dart';
 import 'package:task_manager/utils/handle_error.dart';
 
@@ -14,8 +14,8 @@ class LoginScreenBloc extends Bloc<LoginScreenEvent, LoginScreenState>
   final GlobalKey<FormState> formLoginKey = GlobalKey<FormState>();
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final AuthenticationUsecase authentication =
-      getIt.get<AuthenticationUsecase>();
+  final UserUsecase authentication =
+      getIt.get<UserUsecase>();
 
   LoginScreenBloc() : super(LoginScreenInitial()) {
     on<LoginScreenEvent>((event, emit) async {
