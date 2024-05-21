@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:task_manager/ui/route/routes_screen.dart';
+import 'package:task_manager/ui/utils/dimens.dart';
+import 'package:task_manager/ui/utils/input_validation.dart';
 import 'package:task_manager/ui/views/login_screen/bloc/login_screen_bloc.dart';
+import 'package:task_manager/ui/widget/loading.dart';
+import 'package:task_manager/ui/widget/vertical_space.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -11,59 +16,90 @@ class LoginScreen extends StatelessWidget {
 
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsets.symmetric(vertical: 45),
-                child: const Text(
-                  'Taski',
+        child: Form(
+          key: bloc.formLoginKey,
+          child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: Dimens.spacing16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                const VerticalSpace96(),
+                const Text(
+                  'Login',
                   style: TextStyle(
-                      color: Colors.blue,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 30),
-                )),
-            Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsets.all(10),
-                child: const Text(
-                  'Log In',
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 30,
+                  ),
+                ),
+                const Text(
+                  'Please sing in to continue.',
                   style: TextStyle(fontSize: 20),
-                )),
-            Container(
-              padding: const EdgeInsets.all(10),
-              child: TextField(
-                controller: bloc.usernameController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'User Name',
                 ),
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-              child: TextField(
-                obscureText: true,
-                controller: bloc.passwordController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Password',
+                const VerticalSpace45(),
+                TextFormField(
+                  controller: bloc.usernameController,
+                  validator: (username) =>
+                      bloc.checkValidateUserName(username).message,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'User Name',
+                  ),
                 ),
-              ),
-            ),
-            Container(
-              height: 50,
-              margin: const EdgeInsets.fromLTRB(16, 24, 16, 24),
-              child: ElevatedButton(
-                child: const Text('Login'),
-                onPressed: () {
+                const VerticalSpace16(),
+                TextFormField(
+                  obscureText: true,
+                  controller: bloc.passwordController,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Password',
+                  ),
+                  validator: (password) =>
+                      bloc.checkValidatePassword(password).message,
+                ),
+                BlocConsumer<LoginScreenBloc, LoginScreenState>(
+                  listener: (context, state) {
+                    if (state is IsLoginSuccess) {
+                      Navigator.popAndPushNamed(context, RoutesScreen.home);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                            content: Text('Form Submitted Successfully!')),
+                      );
+                    } else if (state is IsLoginFailure) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(state.message)),
+                      );
+                    }
+                  },
+                  builder: (context, state) {
+                    return Container(
+                      height: 50,
+                      margin: const EdgeInsets.symmetric(
+                        vertical: Dimens.spacing16,
+                      ),
+                      child: ElevatedButton(
+                        onPressed: state is LoadingState
+                            ? null
+                            : () {
+                                BlocProvider.of<LoginScreenBloc>(context)
+                                    .add(Submitted());
+                              },
+                        child: BlocBuilder<LoginScreenBloc, LoginScreenState>(
+                            builder: (BuildContext context, state) {
+                          if (state is LoadingState) {
+                            return const Loading();
+                          }
 
-                },
-              ),
+                          return const Text('Submit');
+                        }),
+                      ),
+                    );
+                  },
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

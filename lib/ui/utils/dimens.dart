@@ -4,6 +4,9 @@ mixin class Dimens {
   static const double spacing4 = 4.0;
   static const double spacing8 = 8.0;
   static const double spacing16 = 16.0;
+  static const double spacing24 = 24.0;
+  static const double spacing45 = 45.0;
+  static const double spacing96 = 96.0;
 
   static const double radiusSmall = 4.0;
   static const double radiusFull = 25.0;
