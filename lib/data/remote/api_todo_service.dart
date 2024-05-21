@@ -3,7 +3,7 @@ import 'package:task_manager/data/remote/response/todos_response.dart';
 import 'package:task_manager/data/remote/todo_api_endpoint.dart';
 
 abstract class ApiToDoService {
-  Future<TodosResponse> getTodos({required int skip, int limit});
+  Future<TodosResponse> getTodos({required int skip, required int limit});
 }
 
 class ApiToDoServiceImpl extends ApiToDoService with TodoApiEndpoint {
@@ -12,7 +12,8 @@ class ApiToDoServiceImpl extends ApiToDoService with TodoApiEndpoint {
   final Dio client;
 
   @override
-  Future<TodosResponse> getTodos({required int skip, int limit = 10}) async {
+  Future<TodosResponse> getTodos(
+      {required int skip, required int limit}) async {
     try {
       final response = await client.get(
         '$baseUrl/todos',

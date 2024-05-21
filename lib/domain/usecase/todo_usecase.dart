@@ -5,8 +5,8 @@ import 'package:task_manager/domain/repository/todo_repository.dart';
 class TodoUsease {
   final TodoRepository repo = TodoRepositoryImpl();
 
-  Future<List<TodoModel>> getTodos() {
-    return repo.getTodos();
+  Future<List<TodoModel>> getTodos({required int skip, required int limit}) {
+    return repo.getTodos(skip: skip, limit: limit);
   }
 
 }

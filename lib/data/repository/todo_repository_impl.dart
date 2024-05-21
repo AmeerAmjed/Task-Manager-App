@@ -9,8 +9,8 @@ class TodoRepositoryImpl extends TodoRepository {
   final ApiToDoService api = ApiToDoServiceImpl(client: getIt<Dio>());
 
   @override
-  Future<List<TodoModel>> getTodos() {
-    return api.getTodos(skip: 0).then((value) {
+  Future<List<TodoModel>> getTodos({required int skip, required int limit}) {
+    return api.getTodos(skip: skip, limit: limit).then((value) {
       return value.todos.map((todo) => todo.toToDoModel()).toList();
     });
   }
