@@ -1,6 +1,6 @@
 import 'package:sqflite/sqlite_api.dart';
-import 'package:task_manager/data/local/database_manager.dart';
 import 'package:task_manager/data/local/entity/user_entity.dart';
+import 'package:task_manager/data/local/utils/database_manager.dart';
 
 const String _userTable = 'userTable';
 

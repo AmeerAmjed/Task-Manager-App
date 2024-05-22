@@ -5,11 +5,12 @@ import 'package:task_manager/domain/model/todo_model.dart';
 class ItemTodo extends StatelessWidget {
   const ItemTodo({
     super.key,
+    this.onPressed,
     required this.todo,
   });
 
   final TodoModel todo;
-
+  final Function()? onPressed;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -25,13 +26,15 @@ class ItemTodo extends StatelessWidget {
           ),
         ),
         trailing: IconButton(
-          iconSize: 30,
+          // iconSize: 30,
           padding: const EdgeInsets.all(4),
           style: const ButtonStyle(
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           ),
-          icon: const Icon(Icons.more_horiz),
-          onPressed: () {},
+          // icon: const Icon(Icons.more_horiz),
+          icon:
+              Icon(todo.isCompleted ? Icons.bookmark_outline : Icons.bookmark),
+          onPressed: onPressed,
         ),
         tileColor: Theme.of(context).colorScheme.surface,
         shape: const RoundedRectangleBorder(

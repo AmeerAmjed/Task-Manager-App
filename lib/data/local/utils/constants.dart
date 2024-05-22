@@ -1,6 +1,5 @@
 mixin class LocalConstants {
 
-
   final String id = 'id';
   final String userId = 'userId';
   final String username = 'username';
@@ -9,5 +8,9 @@ mixin class LocalConstants {
   final String lastName = 'lastName';
   final String gender = 'gender';
   final String avatar = 'avatar';
+
+  final String title = 'title';
+  final String isCompleted = 'isCompleted';
+
 }
 

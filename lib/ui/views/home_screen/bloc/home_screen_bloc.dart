@@ -27,6 +27,11 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
       if (event is CheckMoreTodoRequiredEvent) {
         await _checkForMoreTodoRequired(event, emit);
       }
+
+      if (event is SaveTodo) {
+        await todoUsease.saveTodo(event.todo) ;
+      }
+      
     });
 
     _scrollListener();

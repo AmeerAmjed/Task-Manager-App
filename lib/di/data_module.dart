@@ -2,6 +2,8 @@ part of 'get_it.dart';
 
 void setupDataModule() {
   getIt.registerLazySingleton<Dio>(() => Dio());
+  // getIt.registerLazySingleton<UserTable>(() => UserTable());
+  // getIt.registerLazySingleton<TodoTable>(() => TodoTable());
   getIt.registerLazySingleton<UserLocalDataSource>(
       () => UserLocalDataSourceImpl());
 
@@ -12,5 +14,9 @@ void setupDataModule() {
       ),
       getIt.get<UserLocalDataSource>(),
     ),
+  );
+
+  getIt.registerLazySingleton<LocalTodoDataSource>(
+    () => LocalTodoDataSourceImpl(),
   );
 }

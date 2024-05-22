@@ -44,6 +44,18 @@ abstract class DatabaseManager<T extends BaseEntity> with LocalConstants {
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
 
+  Future<void> insertList(List<T> items) async {
+    Batch batch = _database!.batch();
+    for (T item in items) {
+      batch.insert(
+        tableName,
+        item.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+    }
+    await batch.commit(noResult: true);
+  }
+
   Future<int> update(T item) async => await _database!
       .update(tableName, item.toMap(), where: 'id = ?', whereArgs: [item.id]);
 
@@ -71,6 +83,17 @@ abstract class DatabaseManager<T extends BaseEntity> with LocalConstants {
       tableName,
       where: 'id = ?',
       whereArgs: [id],
+    );
+  }
+
+  Future<List<Map<String, dynamic>>> getDataWithPagination({
+    required int offset,
+    required int limit,
+  }) async {
+    return _database!.query(
+      tableName,
+      offset: offset,
+      limit: limit,
     );
   }
 

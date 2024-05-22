@@ -35,7 +35,13 @@ class TodosView extends StatelessWidget {
             }
           }
 
-          return ItemTodo(todo: context.read<HomeScreenBloc>().todo[index]);
+          final todo = context.read<HomeScreenBloc>().todo[index];
+          return ItemTodo(
+            todo: todo,
+            onPressed: () {
+              context.read<HomeScreenBloc>().add(SaveTodo(todo: todo));
+            },
+          );
         },
         padding: const EdgeInsets.symmetric(
           horizontal: 16,
