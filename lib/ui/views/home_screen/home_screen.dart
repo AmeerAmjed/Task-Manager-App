@@ -4,7 +4,6 @@ import 'package:task_manager/ui/views/home_screen/bloc/home_screen_bloc.dart';
 import 'package:task_manager/ui/views/home_screen/widget/home_app_bar.dart';
 import 'package:task_manager/ui/views/home_screen/widget/todos_view.dart';
 import 'package:task_manager/ui/widget/error_view.dart';
-import 'package:task_manager/ui/widget/loading.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -17,7 +16,7 @@ class HomeScreen extends StatelessWidget {
           builder: (BuildContext context, state) {
         if (context.read<HomeScreenBloc>().todo.isEmpty) {
           if (state is LoadingState) {
-            return const Loading();
+            return const ShimmerTodosView();
           } else if (state is ErrorState) {
             return ErrorView(
               message: state.message,

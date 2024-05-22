@@ -1,9 +1,10 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:task_manager/domain/model/todo_model.dart';
 import 'package:task_manager/ui/views/home_screen/bloc/home_screen_bloc.dart';
 import 'package:task_manager/ui/views/home_screen/widget/item_todo.dart';
 import 'package:task_manager/ui/widget/error_view.dart';
-import 'package:task_manager/ui/widget/loading.dart';
 
 class TodosView extends StatelessWidget {
   const TodosView({
@@ -25,7 +26,7 @@ class TodosView extends StatelessWidget {
         itemBuilder: (BuildContext context, int index) {
           if (index == context.read<HomeScreenBloc>().todo.length - 1) {
             if (state is LoadingState) {
-              return const Loading();
+              return const ShimmerItemTodo();
             } else if (state is ErrorState) {
               return ErrorView(
                 message: (state as ErrorState).message,
@@ -35,6 +36,39 @@ class TodosView extends StatelessWidget {
           }
 
           return ItemTodo(todo: context.read<HomeScreenBloc>().todo[index]);
+        },
+        padding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 16,
+        ),
+      ),
+    );
+  }
+}
+
+class ShimmerTodosView extends StatelessWidget {
+  const ShimmerTodosView({super.key, this.itemCountToShow = 10});
+
+  final int itemCountToShow;
+
+  @override
+  Widget build(BuildContext context) {
+    var todo = ItemTodo(
+      todo: TodoModel(
+        id: 1,
+        userId: 1,
+        title: "",
+        isCompleted: true,
+      ),
+    );
+    return Shimmer.fromColors(
+      baseColor: Colors.grey.shade300,
+      highlightColor: Colors.grey.shade100,
+      enabled: true,
+      child: ListView.builder(
+        itemCount: itemCountToShow, // Number of shimmer placeholders
+        itemBuilder: (context, index) {
+          return todo;
         },
         padding: const EdgeInsets.symmetric(
           horizontal: 16,
