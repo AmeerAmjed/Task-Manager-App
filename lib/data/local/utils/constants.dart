@@ -1,5 +1,5 @@
 mixin class LocalConstants {
-  final String dbName = 'todo.db';
+
 
   final String id = 'id';
   final String userId = 'userId';

@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:task_manager/data/local/constants.dart';
 import 'package:task_manager/data/local/entity/base_entity.dart';
+import 'package:task_manager/data/local/utils/constants.dart';
+
+const String _dbName = 'todo.db';
 
 abstract class DatabaseManager<T extends BaseEntity> with LocalConstants {
   static Database? _database;
@@ -14,18 +16,20 @@ abstract class DatabaseManager<T extends BaseEntity> with LocalConstants {
 
   Future<void> createTable(Batch batch);
 
-  Future<void> initiateDatabase() async {
-    if (DatabaseManager._database != null) {
+  static Future<void> initiateDatabase(List<DatabaseManager> tables) async {
+    if (_database != null) {
       return;
     }
 
     try {
-      DatabaseManager._database = await openDatabase(
-        join(await getDatabasesPath(), dbName),
+      _database = await openDatabase(
+        join(await getDatabasesPath(), _dbName),
         version: 1,
         onCreate: (db, version) async {
           var batch = db.batch();
-          await createTable(batch);
+          for (var table in tables) {
+            await table.createTable(batch);
+          }
           await batch.commit();
         },
       );
