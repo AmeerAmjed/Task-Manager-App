@@ -22,3 +22,14 @@ class HorizontalSpace8 extends StatelessWidget {
     );
   }
 }
+
+class HorizontalSpace16 extends StatelessWidget {
+  const HorizontalSpace16({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const SizedBox(
+      width: Dimens.spacing16,
+    );
+  }
+}

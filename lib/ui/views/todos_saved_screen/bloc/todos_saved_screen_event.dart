@@ -7,4 +7,4 @@ abstract class TodosSavedScreenEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class GetTodosEvent extends TodosSavedScreenEvent {}
+class GetTodosSavedEvent extends TodosSavedScreenEvent {}

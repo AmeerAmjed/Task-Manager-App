@@ -9,10 +9,10 @@ import 'package:task_manager/utils/horizontal_space.dart';
 class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   const HomeAppBar({
     super.key,
-    this.user,
+    required this.onClickSavedAction,
   });
 
-  final UserModel? user;
+  final Function() onClickSavedAction;
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -49,6 +49,18 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
         ],
       ),
+      actions: [
+        IconButton(
+          onPressed: onClickSavedAction,
+          style: IconButton.styleFrom(
+            backgroundColor: Theme.of(context).colorScheme.secondary,
+          ),
+          icon: const Icon(
+            Icons.bookmark,
+          ),
+        ),
+        const HorizontalSpace16(),
+      ],
     );
   }
 

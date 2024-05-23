@@ -18,14 +18,14 @@ class TodosSavedScreenBloc
 
   TodosSavedScreenBloc() : super(LoadingState()) {
     on<TodosSavedScreenEvent>((event, emit) async {
-      if (event is GetTodosEvent) {
+      if (event is GetTodosSavedEvent) {
         await _getTodos(event, emit);
       }
     });
   }
 
   Future _getTodos(
-    GetTodosEvent event,
+    GetTodosSavedEvent event,
     Emitter<TodosSavedScreenState> emit,
   ) async {
     emit(LoadingState());
