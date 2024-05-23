@@ -24,7 +24,10 @@ class LightThemeApp extends ColorSystem {
           systemOverlayStyle: SystemUiOverlayStyle(
             systemNavigationBarColor: lightBackground,
             statusBarColor: lightBackground,
-          )),
+          statusBarBrightness: Brightness.light,
+          statusBarIconBrightness: Brightness.dark,
+        ),
+      ),
       checkboxTheme: const CheckboxThemeData(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(
