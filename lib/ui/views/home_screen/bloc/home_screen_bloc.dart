@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_manager/di/get_it.dart';
 import 'package:task_manager/domain/model/todo_model.dart';
+import 'package:task_manager/domain/model/user_model.dart';
 import 'package:task_manager/domain/usecase/todo_usecase.dart';
+import 'package:task_manager/domain/usecase/user_usecase.dart';
 import 'package:task_manager/utils/end_scroll.dart';
 
 part 'home_screen_event.dart';
@@ -11,9 +13,15 @@ part 'home_screen_state.dart';
 
 class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
   final TodoUsease todoUsease = getIt.get<TodoUsease>();
+  final UserUsecase userUsecase = getIt.get<UserUsecase>();
   final ScrollController scrollController = ScrollController();
 
   List<TodoModel> todo = [];
+
+  UserModel? _user;
+
+  UserModel? get user => _user;
+
   int itemsRetrievedCount = 0;
   int itemsPerRequest = 10;
   bool isLastItem = false;
@@ -21,8 +29,12 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
   HomeScreenBloc() : super(LoadingState()) {
 
     on<HomeScreenEvent>((event, emit) async {
+      if (event is GetDataEvent) {
+        await _getTodos(emit);
+        await _getUserInfo(emit);
+      }
       if (event is GetTodosEvent) {
-        await _getTodos(event, emit);
+        await _getTodos(emit);
       }
       if (event is CheckMoreTodoRequiredEvent) {
         await _checkForMoreTodoRequired(event, emit);
@@ -37,7 +49,7 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
     _scrollListener();
   }
 
-  Future _getTodos(GetTodosEvent event, Emitter<HomeScreenState> emit) async {
+  Future _getTodos(Emitter<HomeScreenState> emit) async {
     emit(LoadingState());
     try {
       itemsRetrievedCount = todo.length;
@@ -63,6 +75,13 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
     if (!isLastItem) {
       add(GetTodosEvent());
     }
+  }
+
+  Future _getUserInfo(Emitter<HomeScreenState> emit) async {
+    await userUsecase.getUser().then((user) {
+      _user = user;
+    });
+    emit(SucceedGetUserInfoState());
   }
 
   _scrollListener() {

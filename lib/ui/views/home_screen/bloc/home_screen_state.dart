@@ -16,7 +16,7 @@ class SucceedGetDataState extends HomeScreenState {
   @override
   List<Object?> get props => [todos];
 }
-
+class SucceedGetUserInfoState extends HomeScreenState {}
 class ErrorState extends HomeScreenState {
   final String message;
 
