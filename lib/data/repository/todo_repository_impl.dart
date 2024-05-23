@@ -34,4 +34,11 @@ class TodoRepositoryImpl extends TodoRepository {
   Future<int> saveTodoInLocal(TodoModel todos) async {
     return localTodoDataSource.saveTodos(todos.toTodoModel());
   }
+
+  @override
+  Future<List<TodoModel>> getTodosSaved() {
+    return localTodoDataSource.getTodosSaved().then(
+          (todos) => todos.map((todo) => todo.toTodoModel()).toList(),
+        );
+  }
 }

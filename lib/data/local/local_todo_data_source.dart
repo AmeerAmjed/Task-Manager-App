@@ -8,6 +8,8 @@ abstract class LocalTodoDataSource {
     required int offset,
     required int limit,
   });
+
+  Future<List<TodoEntity>> getTodosSaved();
 }
 
 class LocalTodoDataSourceImpl extends TodoTable implements LocalTodoDataSource {
@@ -25,5 +27,11 @@ class LocalTodoDataSourceImpl extends TodoTable implements LocalTodoDataSource {
         .then((todos) {
       return todos.map((todo) => TodoEntity.fromJson(todo)).toList();
     });
+  }
+
+  @override
+  Future<List<TodoEntity>> getTodosSaved() async {
+    return await getEventTableData().then(
+        (todos) => todos.map((todo) => TodoEntity.fromJson(todo)).toList());
   }
 }

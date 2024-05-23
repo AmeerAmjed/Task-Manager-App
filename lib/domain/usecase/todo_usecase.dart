@@ -17,4 +17,8 @@ class TodoUsease {
       return false;
     }
   }
+
+  Future<List<TodoModel>> getTodosSaved() {
+    return repo.getTodosSaved();
+  }
 }
