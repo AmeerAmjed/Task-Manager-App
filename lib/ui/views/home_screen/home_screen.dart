@@ -4,6 +4,7 @@ import 'package:task_manager/ui/route/routes_screen.dart';
 import 'package:task_manager/ui/views/home_screen/bloc/home_screen_bloc.dart';
 import 'package:task_manager/ui/views/home_screen/widget/home_app_bar.dart';
 import 'package:task_manager/ui/views/home_screen/widget/todos_view.dart';
+import 'package:task_manager/ui/widget/bottom_sheet.dart';
 import 'package:task_manager/ui/widget/error_view.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -11,7 +12,10 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
     return Scaffold(
+      key: scaffoldKey,
       appBar: HomeAppBar(
         onClickSavedAction: () {
           Navigator.pushNamed(context, RoutesScreen.todoSaved);
@@ -29,9 +33,50 @@ class HomeScreen extends StatelessWidget {
             );
           }
         }
-            return TodosView(
-          state: state,
-        );
+
+        if (state is SucceedDeleteTodoState) {
+          Future(() {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text("Succeed delete Todo"),
+              ),
+            );
+          });
+        }
+
+        if (state is FailedDeleteTodoState) {
+          Future(() {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text("Failed delete Todo"),
+              ),
+            );
+          });
+        }
+
+        return TodosView(
+            state: state,
+            onClickMoreOptions: (todoId) {
+              bottomSheet(
+                height: 100,
+                context: context,
+                children: <Widget>[
+                  ButtonActionBottomSheet(
+                    title: "Delete",
+                    icon: Icons.delete,
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      context.read<HomeScreenBloc>().add(
+                            DeleteTodo(
+                              todoId: todoId,
+                            ),
+                          );
+                    },
+                    paddingVertical: 4,
+                  ),
+                ],
+              );
+            });
       }),
     );
   }

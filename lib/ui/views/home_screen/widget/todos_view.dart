@@ -10,9 +10,11 @@ class TodosView extends StatelessWidget {
   const TodosView({
     super.key,
     required this.state,
+    required this.onClickMoreOptions,
   });
 
   final HomeScreenState state;
+  final Function(int todoId) onClickMoreOptions;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +41,7 @@ class TodosView extends StatelessWidget {
           return ItemTodo(
             todo: todo,
             onPressed: () {
-              context.read<HomeScreenBloc>().add(SaveTodo(todo: todo));
+              onClickMoreOptions(todo.id);
             },
           );
         },

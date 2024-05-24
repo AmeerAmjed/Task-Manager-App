@@ -7,5 +7,7 @@ abstract class TodoRepository {
       {required int offset, required int limit});
 
   Future<int> saveTodoInLocal(TodoModel todos);
+
+  Future<bool> deleteTodo(int todoId);
   Future<List<TodoModel>> getTodosSaved();
 }

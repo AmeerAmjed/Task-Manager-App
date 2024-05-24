@@ -25,3 +25,7 @@ class ErrorState extends HomeScreenState {
   @override
   List<Object?> get props => [message];
 }
+
+class SucceedDeleteTodoState extends HomeScreenState {}
+
+class FailedDeleteTodoState extends HomeScreenState {}

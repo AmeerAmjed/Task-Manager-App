@@ -43,7 +43,10 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
       if (event is SaveTodo) {
         await todoUsease.saveTodo(event.todo) ;
       }
-      
+
+      if (event is DeleteTodo) {
+        await _deleteTodo(event, emit);
+      }
     });
 
     _scrollListener();
@@ -94,4 +97,8 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
     );
   }
 
+  Future _deleteTodo(DeleteTodo event, Emitter<HomeScreenState> emit) async {
+    var result = await todoUsease.deleteTodo(event.todoId);
+    result ? emit(SucceedDeleteTodoState()) : emit(FailedDeleteTodoState());
+  }
 }

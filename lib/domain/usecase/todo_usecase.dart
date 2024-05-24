@@ -18,6 +18,10 @@ class TodoUsease {
     }
   }
 
+  Future<bool> deleteTodo(int todoId) async {
+    return await repo.deleteTodo(todoId);
+  }
+
   Future<List<TodoModel>> getTodosSaved() {
     return repo.getTodosSaved();
   }

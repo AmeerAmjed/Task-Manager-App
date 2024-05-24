@@ -26,14 +26,12 @@ class ItemTodo extends StatelessWidget {
           ),
         ),
         trailing: IconButton(
-          // iconSize: 30,
+          iconSize: 25,
           padding: const EdgeInsets.all(4),
           style: const ButtonStyle(
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           ),
-          // icon: const Icon(Icons.more_horiz),
-          icon:
-              Icon(todo.isCompleted ? Icons.bookmark_outline : Icons.bookmark),
+          icon: const Icon(Icons.more_horiz),
           onPressed: onPressed,
         ),
         tileColor: Theme.of(context).colorScheme.surface,
