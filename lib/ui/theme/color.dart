@@ -17,6 +17,7 @@ mixin class ColorSystem {
   final Color lightOnSurface = const Color(0xFF8D9CB8);
   
   final Color lightCheckboxBoarder  = const Color(0xFFC6CFDC);
+  final Color dividerBottomSheet  = const Color(0xffd0d4dd);
 
 
 
