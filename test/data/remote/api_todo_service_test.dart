@@ -5,7 +5,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:task_manager/data/remote/api_todo_service.dart';
+import 'package:task_manager/data/remote/response/delete_todo_response.dart';
 import 'package:task_manager/data/remote/response/todos_response.dart';
+import 'package:task_manager/utils/handle_error.dart';
 
 import 'api_todo_service_test.mocks.dart';
 
@@ -85,7 +87,108 @@ void main() {
       // Assert
       expect(result, isA<TodosResponse>());
     });
+  });
 
+  group('deleteTodo', () {
+    test('should return DeleteTodoResponse when successfully delete a todo',
+        () async {
+      //Give in
+      const response = DeleteTodoResponse(
+        id: 1,
+        todo: 'Test Todo',
+        completed: true,
+        isDeleted: true,
+        userId: 123,
+      );
+      //When
+      when(apiService.deleteTodo(todoId: 1)).thenAnswer((_) async => response);
+      //Act
+      final result = await apiService.deleteTodo(todoId: 1);
 
+      //Assert
+      expect(result, isA<DeleteTodoResponse>());
+    });
+
+    test(
+        'should return response with isDeleted ture when item deletion successes',
+        () async {
+      //Give in
+      const response = DeleteTodoResponse(
+        id: 1,
+        todo: 'Test Todo',
+        completed: false,
+        isDeleted: true,
+        userId: 123,
+      );
+
+      //when
+      when(apiService.deleteTodo(todoId: 1)).thenAnswer((_) async => response);
+      // Act
+      final result = await apiService.deleteTodo(todoId: 1);
+
+      // Assert
+      verify(apiService.deleteTodo(todoId: 1)).called(1);
+      expect(result.isDeleted, isTrue);
+    });
+
+    test('should return response with isDeleted false when item deletion fails',
+        () async {
+      //Give in
+      const response = DeleteTodoResponse(
+        id: 1,
+        todo: 'Test Todo',
+        completed: false,
+        isDeleted: false,
+        userId: 123,
+      );
+
+      //when
+      when(apiService.deleteTodo(todoId: 1)).thenAnswer((_) async => response);
+      // Act
+      final result = await apiService.deleteTodo(todoId: 1);
+
+      // Assert
+      verify(apiService.deleteTodo(todoId: 1)).called(1);
+      expect(result.isDeleted, isFalse);
+    });
+
+    test('should throw an exception when error', () async {
+      // Give in
+      when(apiService.deleteTodo(todoId: 1))
+          .thenThrow(Exception('Failed to delete'));
+
+      // Act & Assert
+      expect(
+          () async => await apiService.deleteTodo(todoId: 1), throwsException);
+
+      // Verify
+      verify(apiService.deleteTodo(todoId: 1)).called(1);
+    });
+
+    test('should throw error when todoId is null', () async {
+      //Give in
+      const todoId = null;
+      when(apiService.deleteTodo(todoId: todoId))
+          .thenThrow(ArgumentError('todoId cannot be null'));
+
+      // Act & Assert
+      expect(() async => await apiService.deleteTodo(todoId: null),
+          throwsA(isA<ArgumentError>()));
+
+      // Verify
+      verify(apiService.deleteTodo(todoId: null)).called(1);
+    });
+
+    test('should throw error when server error', () async {
+      when(apiService.deleteTodo(todoId: 1))
+          .thenThrow(const ServerException(message: 'Network error'));
+
+      // Act & Assert
+      expect(() async => await apiService.deleteTodo(todoId: 1),
+          throwsA(isA<ServerException>()));
+
+      // Verify
+      verify(apiService.deleteTodo(todoId: 1)).called(1);
+    });
   });
 }

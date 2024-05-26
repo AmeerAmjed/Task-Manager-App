@@ -41,4 +41,11 @@ class TodoRepositoryImpl extends TodoRepository {
           (todos) => todos.map((todo) => todo.toTodoModel()).toList(),
         );
   }
+
+  @override
+  Future<bool> deleteTodo(int todoId) {
+    return api.deleteTodo(todoId: todoId).then((value) {
+      return value.isDeleted;
+    });
+  }
 }

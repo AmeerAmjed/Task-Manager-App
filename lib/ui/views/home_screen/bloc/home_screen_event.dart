@@ -19,3 +19,11 @@ class SaveTodo extends HomeScreenEvent {
 
   List<Object?> get props => [todo];
 }
+
+class DeleteTodo extends HomeScreenEvent {
+  final int todoId;
+
+  const DeleteTodo({required this.todoId});
+
+  List<Object?> get props => [todoId];
+}
