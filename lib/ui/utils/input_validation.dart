@@ -1,6 +1,7 @@
 enum UserNameValidateState { empty, valid }
 
 enum PasswordValidateState { empty, short, valid }
+enum TitleTodoValidateState { empty, short, valid }
 
 mixin class InputValidation {
   UserNameValidateState checkValidateUserName(String? value) {
@@ -17,6 +18,15 @@ mixin class InputValidation {
       return PasswordValidateState.short;
     }
     return PasswordValidateState.valid;
+  }
+
+  TitleTodoValidateState checkValidateTitleTodo(String? value) {
+    if (value == null || value.isEmpty) {
+      return TitleTodoValidateState.empty;
+    } else if (value.trim().length < 4) {
+      return TitleTodoValidateState.short;
+    }
+    return TitleTodoValidateState.valid;
   }
 }
 
