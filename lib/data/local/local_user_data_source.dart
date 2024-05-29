@@ -5,6 +5,8 @@ abstract class UserLocalDataSource {
   saveUser(UserEntity user);
 
   Future<UserEntity> getUser();
+
+  Future<int> getUserId();
 }
 
 class UserLocalDataSourceImpl extends UserTable implements UserLocalDataSource {
@@ -18,6 +20,13 @@ class UserLocalDataSourceImpl extends UserTable implements UserLocalDataSource {
   Future<UserEntity> getUser() {
     return queryById(userIdLocal).then((value) {
       return  UserEntity.fromJson(value.first);
+    });
+  }
+
+  @override
+  Future<int> getUserId() {
+    return queryById(userIdLocal).then((value) {
+      return UserEntity.fromJson(value.first).id;
     });
   }
 }
