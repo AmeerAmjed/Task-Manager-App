@@ -8,3 +8,18 @@ abstract class CreateTodoState extends Equatable {
 }
 
 class CreateTodoInitial extends CreateTodoState {}
+
+@immutable
+class LoadingUploadTodo extends CreateTodoState {}
+
+@immutable
+class IsCreateTodoSuccess extends CreateTodoState {}
+
+class IsCreateTodoFailed extends CreateTodoState {
+  final String message;
+
+  const IsCreateTodoFailed(this.message);
+
+  @override
+  List<Object> get props => [message];
+}

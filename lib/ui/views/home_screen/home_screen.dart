@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_manager/ui/route/routes_screen.dart';
 import 'package:task_manager/ui/views/home_screen/bloc/home_screen_bloc.dart';
+import 'package:task_manager/ui/views/home_screen/widget/button_add_todo.dart';
 import 'package:task_manager/ui/views/home_screen/widget/home_app_bar.dart';
 import 'package:task_manager/ui/views/home_screen/widget/todos_view.dart';
 import 'package:task_manager/ui/widget/bottom_sheet.dart';
@@ -16,6 +17,7 @@ class HomeScreen extends StatelessWidget {
 
     return Scaffold(
       key: scaffoldKey,
+      resizeToAvoidBottomInset: false,
       appBar: HomeAppBar(
         onClickSavedAction: () {
           Navigator.pushNamed(context, RoutesScreen.todoSaved);
@@ -78,6 +80,7 @@ class HomeScreen extends StatelessWidget {
               );
             });
       }),
+      floatingActionButton: const ButtonAddTodo(),
     );
   }
 }

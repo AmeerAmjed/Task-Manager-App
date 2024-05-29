@@ -53,3 +53,16 @@ extension UserNameValidateStateExtension on UserNameValidateState {
     }
   }
 }
+
+extension TitleTodoValidateStateExtension on TitleTodoValidateState {
+  String? get message {
+    switch (this) {
+      case TitleTodoValidateState.empty:
+        return "Title is required";
+      case TitleTodoValidateState.short:
+        return "Title must be at least 4 characters long";
+      case TitleTodoValidateState.valid:
+        return null;
+    }
+  }
+}

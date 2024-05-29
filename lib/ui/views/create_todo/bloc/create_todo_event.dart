@@ -6,3 +6,6 @@ abstract class CreateTodoEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+@immutable
+class SubmittedCreateTodoEvent extends CreateTodoEvent {}
