@@ -22,6 +22,16 @@ class TodoUsease {
     return await repo.deleteTodo(todoId);
   }
 
+  Future<bool> createTodo({
+    required String title,
+    required bool isCompleted,
+  }) async {
+    return await repo.createTodo(
+      title: title,
+      isCompleted: isCompleted,
+    );
+  }
+
   Future<List<TodoModel>> getTodosSaved() {
     return repo.getTodosSaved();
   }
