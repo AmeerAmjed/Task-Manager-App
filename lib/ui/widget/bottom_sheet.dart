@@ -1,36 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:task_manager/ui/theme/color.dart';
 import 'package:task_manager/ui/utils/dimens.dart';
-import 'package:task_manager/ui/widget/vertical_space.dart';
 import 'package:task_manager/utils/horizontal_space.dart';
 
 bottomSheet({
   required BuildContext context,
   required List<Widget> children,
-  Widget? buttonAction,
   double height = 250.0,
 }) {
   showModalBottomSheet<void>(
     context: context,
+    isScrollControlled: true,
+    useSafeArea: true,
+    backgroundColor: Theme.of(context).colorScheme.background,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.only(
+        topRight: Radius.circular(Dimens.radius16),
+        topLeft: Radius.circular(Dimens.radius16),
+      ),
+    ),
     builder: (BuildContext context) {
       return Container(
         height: height,
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.background,
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(Dimens.radius16),
-            topRight: Radius.circular(Dimens.radius16),
-          ),
+        margin: EdgeInsets.only(
+          right: Dimens.spacing16,
+          left: Dimens.spacing16,
+          bottom: (MediaQuery.of(context).viewInsets.bottom - 50.0)
+              .abs()
+              .toDouble(),
         ),
+        width: double.infinity,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const _DividerBottomSheet(),
             ...children,
-            const Spacer(),
-            if (buttonAction != null) buttonAction,
-            const VerticalSpace16(),
           ],
         ),
       );
