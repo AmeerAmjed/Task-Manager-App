@@ -5,20 +5,23 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:task_manager/data/remote/api_todo_service.dart';
+import 'package:task_manager/data/remote/model/create_todo_params.dart';
 import 'package:task_manager/data/remote/response/delete_todo_response.dart';
 import 'package:task_manager/data/remote/response/todos_response.dart';
 import 'package:task_manager/utils/handle_error.dart';
 
 import 'api_todo_service_test.mocks.dart';
 
-@GenerateMocks([Dio, ApiToDoServiceImpl])
+@GenerateMocks([Dio, ApiToDoServiceImpl, CreateTodoParams])
 void main() {
   late MockDio client;
   late MockApiToDoServiceImpl apiService;
+  late MockCreateTodoParams mockCreateTodoParams;
 
   setUp(() {
     client = MockDio();
     apiService = MockApiToDoServiceImpl();
+    mockCreateTodoParams = MockCreateTodoParams();
   });
 
   group('constructor', () {
@@ -92,7 +95,7 @@ void main() {
   group('deleteTodo', () {
     test('should return DeleteTodoResponse when successfully delete a todo',
         () async {
-      //Give in
+      //Arrange
       const response = DeleteTodoResponse(
         id: 1,
         todo: 'Test Todo',
@@ -112,7 +115,7 @@ void main() {
     test(
         'should return response with isDeleted ture when item deletion successes',
         () async {
-      //Give in
+      //Arrange
       const response = DeleteTodoResponse(
         id: 1,
         todo: 'Test Todo',
@@ -133,7 +136,7 @@ void main() {
 
     test('should return response with isDeleted false when item deletion fails',
         () async {
-      //Give in
+      //Arrange
       const response = DeleteTodoResponse(
         id: 1,
         todo: 'Test Todo',
@@ -153,7 +156,7 @@ void main() {
     });
 
     test('should throw an exception when error', () async {
-      // Give in
+      // Arrange
       when(apiService.deleteTodo(todoId: 1))
           .thenThrow(Exception('Failed to delete'));
 
@@ -166,7 +169,7 @@ void main() {
     });
 
     test('should throw error when todoId is null', () async {
-      //Give in
+      //Arrange
       const todoId = null;
       when(apiService.deleteTodo(todoId: todoId))
           .thenThrow(ArgumentError('todoId cannot be null'));
@@ -190,5 +193,45 @@ void main() {
       // Verify
       verify(apiService.deleteTodo(todoId: 1)).called(1);
     });
+  });
+
+  group('createTodo', () {
+
+    test('should return ture when successfully create a todo', () async {
+      //When
+      when(apiService.createTodo(todo: mockCreateTodoParams))
+          .thenAnswer((_) async => true);
+      //Act
+      final result = await apiService.createTodo(todo: mockCreateTodoParams);
+
+      //Assert
+      expect(result, true);
+    });
+
+    test('should return false when failed create a todo', () async {
+      //When
+      when(apiService.createTodo(todo: mockCreateTodoParams))
+          .thenAnswer((_) async => false);
+      //Act
+      final result = await apiService.createTodo(todo: mockCreateTodoParams);
+
+      //Assert
+      expect(result, false);
+    });
+
+    test('should throw an exception when error', () async {
+      // Arrange
+      when(apiService.createTodo(todo: mockCreateTodoParams))
+          .thenThrow(Exception('Failed to create todo'));
+
+      // Act & Assert
+      expect(
+          () async => await apiService.createTodo(todo: mockCreateTodoParams),
+          throwsException);
+
+      // Verify
+      verify(apiService.createTodo(todo: mockCreateTodoParams)).called(1);
+    });
+
   });
 }
