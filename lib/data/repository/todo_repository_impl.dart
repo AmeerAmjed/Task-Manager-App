@@ -1,17 +1,22 @@
 import 'package:dio/dio.dart';
 import 'package:task_manager/data/local/local_todo_data_source.dart';
+import 'package:task_manager/data/local/local_user_data_source.dart';
 import 'package:task_manager/data/local/mapper/to_todo_entity.dart';
 import 'package:task_manager/data/local/mapper/to_todo_model.dart';
 import 'package:task_manager/data/remote/api_todo_service.dart';
 import 'package:task_manager/data/remote/mapper/to_todo_model.dart';
+import 'package:task_manager/data/remote/model/create_todo_params.dart';
 import 'package:task_manager/di/get_it.dart';
 import 'package:task_manager/domain/model/todo_model.dart';
 import 'package:task_manager/domain/repository/todo_repository.dart';
 
 class TodoRepositoryImpl extends TodoRepository {
-  final ApiToDoService api = ApiToDoServiceImpl(client: getIt<Dio>());
+  final ApiToDoService api = ApiToDoServiceImpl(getIt<Dio>());
   final LocalTodoDataSource localTodoDataSource =
       getIt.get<LocalTodoDataSource>();
+
+  final UserLocalDataSource userLocalDataSource =
+      getIt.get<UserLocalDataSource>();
 
   @override
   Future<List<TodoModel>> getTodos({required int skip, required int limit}) {
@@ -47,5 +52,21 @@ class TodoRepositoryImpl extends TodoRepository {
     return api.deleteTodo(todoId: todoId).then((value) {
       return value.isDeleted;
     });
+  }
+
+  @override
+  Future<bool> createTodo({
+    required String title,
+    required bool isCompleted,
+  }) async {
+    return api
+        .createTodo(
+          todo: CreateTodoParams(
+            userId: await userLocalDataSource.getUserId(),
+            title: title,
+            isCompleted: isCompleted,
+          ),
+        )
+        .then((value) => value);
   }
 }

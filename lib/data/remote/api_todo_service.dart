@@ -1,18 +1,20 @@
 import 'package:dio/dio.dart';
+import 'package:task_manager/data/remote/model/create_todo_params.dart';
 import 'package:task_manager/data/remote/response/delete_todo_response.dart';
+import 'package:task_manager/data/remote/response/todo_dto.dart';
 import 'package:task_manager/data/remote/response/todos_response.dart';
-import 'package:task_manager/data/remote/todo_api_endpoint.dart';
+import 'package:task_manager/data/remote/utils/base_service.dart';
 
 abstract class ApiToDoService {
   Future<TodosResponse> getTodos({required int skip, required int limit});
 
   Future<DeleteTodoResponse> deleteTodo({required int todoId});
+
+  Future<bool> createTodo({required CreateTodoParams todo});
 }
 
-class ApiToDoServiceImpl extends ApiToDoService with TodoApiEndpoint {
-  ApiToDoServiceImpl({required this.client});
-
-  final Dio client;
+class ApiToDoServiceImpl extends BaseApiService implements ApiToDoService {
+  ApiToDoServiceImpl(Dio client) : super(client: client);
 
   @override
   Future<TodosResponse> getTodos(
@@ -53,5 +55,18 @@ class ApiToDoServiceImpl extends ApiToDoService with TodoApiEndpoint {
     } catch (e) {
       throw Exception('Failed to delete todo: $e');
     }
+  }
+
+  @override
+  Future<bool> createTodo({required CreateTodoParams todo}) async {
+    return await tryRequest<TodoDto>(
+      client.post(
+        '/todos/add',
+        data: todo.toBody(),
+      ),
+      (json) => TodoDto.fromJson(json),
+    ).then((value) {
+      return true;
+    });
   }
 }

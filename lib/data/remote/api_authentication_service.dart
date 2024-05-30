@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:task_manager/data/remote/response/login_response.dart';
-import 'package:task_manager/data/remote/todo_api_endpoint.dart';
+import 'package:task_manager/data/remote/utils/todo_api_endpoint.dart';
 import 'package:task_manager/utils/handle_error.dart';
 
 abstract class ApiAuthenticationService {

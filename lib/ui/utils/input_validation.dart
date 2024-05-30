@@ -1,6 +1,7 @@
 enum UserNameValidateState { empty, valid }
 
 enum PasswordValidateState { empty, short, valid }
+enum TitleTodoValidateState { empty, short, valid }
 
 mixin class InputValidation {
   UserNameValidateState checkValidateUserName(String? value) {
@@ -17,6 +18,15 @@ mixin class InputValidation {
       return PasswordValidateState.short;
     }
     return PasswordValidateState.valid;
+  }
+
+  TitleTodoValidateState checkValidateTitleTodo(String? value) {
+    if (value == null || value.isEmpty) {
+      return TitleTodoValidateState.empty;
+    } else if (value.trim().length < 4) {
+      return TitleTodoValidateState.short;
+    }
+    return TitleTodoValidateState.valid;
   }
 }
 
@@ -39,6 +49,19 @@ extension UserNameValidateStateExtension on UserNameValidateState {
       case UserNameValidateState.empty:
         return "Username is required";
       case UserNameValidateState.valid:
+        return null;
+    }
+  }
+}
+
+extension TitleTodoValidateStateExtension on TitleTodoValidateState {
+  String? get message {
+    switch (this) {
+      case TitleTodoValidateState.empty:
+        return "Title is required";
+      case TitleTodoValidateState.short:
+        return "Title must be at least 4 characters long";
+      case TitleTodoValidateState.valid:
         return null;
     }
   }
