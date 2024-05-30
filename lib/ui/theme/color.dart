@@ -20,6 +20,22 @@ mixin class ColorSystem {
   final Color dividerBottomSheet  = const Color(0xffd0d4dd);
 
 
+  final Color darkBackground = const Color(0xFF1D1825);
+  final Color darkOnBackground = const Color(0xFF3F3D56);
+
+  final Color darkPrimary = const Color(0xFF9E78CF);
+  final Color darkOnPrimary = const Color(0xFFFFFFFF);
+
+  final Color darkSecondary = const Color(0x803E1671);
+  final Color darkOnSecondary = const Color(0xFF15101C);
+
+  final Color darkError = const Color(0xFFFF5E5E);
+  final Color darkOnError = const Color(0xFFFFFFFF);
+
+  final Color darkSurface = const Color(0xFF15101C);
+  final Color darkOnSurface = const Color(0xFF9E78CF);
+
+  final Color darkCheckboxBoarder  = const Color(0xFFC6CFDC);
 
 
 }

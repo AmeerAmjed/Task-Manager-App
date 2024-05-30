@@ -35,6 +35,7 @@ class ToDoApp extends StatelessWidget with AppRouter {
       child: MaterialApp(
         title: 'Task Manager',
         theme: ThemeApp().light,
+        darkTheme: ThemeApp().dark,
         home: const HomeScreen(),
         onGenerateRoute: onGenerateRoute,
       ),
