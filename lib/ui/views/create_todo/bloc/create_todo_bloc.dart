@@ -28,6 +28,11 @@ class CreateTodoBloc extends Bloc<CreateTodoEvent, CreateTodoState>
         await _onSubmitted(emit);
       }
     });
+
+    on<OnChangeIsCompleted>((event, emit) async {
+      _isCompleted = event.isCompleted;
+      emit(CheckBoxCompletedState(isCompleted: _isCompleted));
+    });
   }
 
   Future _onSubmitted(Emitter<CreateTodoState> emit) async {

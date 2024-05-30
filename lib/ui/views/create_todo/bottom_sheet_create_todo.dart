@@ -69,8 +69,12 @@ void bottomSheetCreateTodo(
                           activeColor: Theme.of(context).colorScheme.primary,
                           value: createTodoBloc.isCompleted,
                           onChanged: (bool? value) {
-
-                          }),
+                        if (value != null) {
+                          createTodoBloc.add(
+                            OnChangeIsCompleted(isCompleted: value),
+                          );
+                        }
+                      }),
                   validator: (titleTodo) =>
                       createTodoBloc.checkValidateTitleTodo(titleTodo).message,
                 ),

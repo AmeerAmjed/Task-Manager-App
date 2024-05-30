@@ -9,3 +9,13 @@ abstract class CreateTodoEvent extends Equatable {
 
 @immutable
 class SubmittedCreateTodoEvent extends CreateTodoEvent {}
+
+@immutable
+class OnChangeIsCompleted extends CreateTodoEvent {
+  final bool isCompleted;
+
+  const OnChangeIsCompleted({required this.isCompleted});
+
+  @override
+  List<Object> get props => [isCompleted];
+}
