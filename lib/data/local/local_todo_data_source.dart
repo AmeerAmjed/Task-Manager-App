@@ -1,5 +1,5 @@
 import 'package:task_manager/data/local/entity/todo_entity.dart';
-import 'package:task_manager/data/local/table/todo_tablle.dart';
+import 'package:task_manager/data/local/table/todo_saved_tablle.dart';
 
 abstract class LocalTodoDataSource {
   Future<int> saveTodos(TodoEntity user);
@@ -12,7 +12,7 @@ abstract class LocalTodoDataSource {
   Future<List<TodoEntity>> getTodosSaved();
 }
 
-class LocalTodoDataSourceImpl extends TodoTable implements LocalTodoDataSource {
+class LocalTodoDataSourceImpl extends TodoSavedTable implements LocalTodoDataSource {
   @override
   Future<int> saveTodos(TodoEntity todos) {
     return insert(todos);
