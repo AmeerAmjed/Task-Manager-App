@@ -1,12 +1,12 @@
 import 'package:sqflite/sqlite_api.dart';
-import 'package:task_manager/data/local/utils/database_manager.dart';
 import 'package:task_manager/data/local/entity/todo_entity.dart';
+import 'package:task_manager/data/local/utils/database_manager.dart';
 
-const String _todoTable = 'todoTable';
+const String _todoCacheTable = 'todoCacheTable';
 
-class TodoTable extends DatabaseManager<TodoEntity> {
+class TodoCacheTable extends DatabaseManager<TodoEntity> {
   @override
-  String tableName = _todoTable;
+  String tableName = _todoCacheTable;
 
   @override
   Future<void> createTable(Batch batch) async {
