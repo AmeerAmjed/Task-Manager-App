@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:task_manager/data/local/local_todo_data_source.dart';
+import 'package:task_manager/data/local/local_todos_cache_data_source.dart';
 import 'package:task_manager/data/local/local_user_data_source.dart';
 import 'package:task_manager/data/local/mapper/to_todo_entity.dart';
 import 'package:task_manager/data/local/mapper/to_todo_model.dart';
@@ -14,6 +15,9 @@ class TodoRepositoryImpl extends TodoRepository {
   final ApiToDoService api = ApiToDoServiceImpl(getIt<Dio>());
   final LocalTodoDataSource localTodoDataSource =
       getIt.get<LocalTodoDataSource>();
+
+  final LocalTodosCacheDataSource localTodosCacheDataSource =
+      getIt.get<LocalTodosCacheDataSource>();
 
   final UserLocalDataSource userLocalDataSource =
       getIt.get<UserLocalDataSource>();
@@ -30,14 +34,14 @@ class TodoRepositoryImpl extends TodoRepository {
     required int offset,
     required int limit,
   }) {
-    return localTodoDataSource.getTodos(offset: offset, limit: limit).then(
+    return localTodosCacheDataSource.getTodos(offset: offset, limit: limit).then(
           (todos) => todos.map((todo) => todo.toTodoModel()).toList(),
         );
   }
 
   @override
   Future<int> saveTodoInLocal(TodoModel todos) async {
-    return localTodoDataSource.saveTodos(todos.toTodoModel());
+    return localTodoDataSource.saveTodo(todos.toTodoModel());
   }
 
   @override
@@ -68,5 +72,14 @@ class TodoRepositoryImpl extends TodoRepository {
           ),
         )
         .then((value) => value);
+  }
+
+  @override
+  Future<void> saveTodosInLocal(List<TodoModel> todos) {
+    return localTodosCacheDataSource.saveTodos(todos
+        .map(
+          (todo) => todo.toTodoModel(),
+        )
+        .toList());
   }
 }

@@ -8,6 +8,8 @@ abstract class TodoRepository {
 
   Future<int> saveTodoInLocal(TodoModel todos);
 
+  Future<void> saveTodosInLocal(List<TodoModel> todos);
+
   Future<bool> deleteTodo(int todoId);
 
   Future<bool> createTodo({required String title, required bool isCompleted});

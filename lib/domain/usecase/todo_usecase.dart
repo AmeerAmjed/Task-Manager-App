@@ -5,8 +5,20 @@ import 'package:task_manager/domain/repository/todo_repository.dart';
 class TodoUsease {
   final TodoRepository repo = TodoRepositoryImpl();
 
-  Future<List<TodoModel>> getTodos({required int skip, required int limit}) {
-    return repo.getTodos(skip: skip, limit: limit);
+  Future<List<TodoModel>> getTodos({
+    required int skip,
+    required int limit,
+  }) async {
+    final cachedTodos =
+        await repo.getTodosFromLocal(offset: skip, limit: limit);
+
+    if (cachedTodos.isNotEmpty) {
+      return cachedTodos;
+    }
+
+    final todos = await repo.getTodos(skip: skip, limit: limit);
+    await repo.saveTodosInLocal(todos);
+    return getTodos(skip: skip, limit: limit);
   }
 
   Future<bool> saveTodo(TodoModel todo) async {

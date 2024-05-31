@@ -19,4 +19,8 @@ void setupDataModule() {
   getIt.registerLazySingleton<LocalTodoDataSource>(
     () => LocalTodoDataSourceImpl(),
   );
+
+  getIt.registerLazySingleton<LocalTodosCacheDataSource>(
+    () => LocalTodosCacheDataSourceImpl(),
+  );
 }
