@@ -11,23 +11,17 @@ import 'package:task_manager/utils/end_scroll.dart';
 part 'home_screen_event.dart';
 part 'home_screen_state.dart';
 
-class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
+class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenUiState> {
   final TodoUsease todoUsease = getIt.get<TodoUsease>();
   final UserUsecase userUsecase = getIt.get<UserUsecase>();
   final ScrollController scrollController = ScrollController();
 
-  List<TodoModel> todo = [];
-
-  UserModel? _user;
-
-  UserModel? get user => _user;
 
   int itemsRetrievedCount = 0;
   int itemsPerRequest = 10;
   bool isLastItem = false;
 
-  HomeScreenBloc() : super(LoadingState()) {
-
+  HomeScreenBloc() : super(const HomeScreenInitialUiState()) {
     on<HomeScreenEvent>((event, emit) async {
       if (event is GetDataEvent) {
         await _getTodos(emit);
@@ -47,44 +41,74 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
       if (event is DeleteTodo) {
         await _deleteTodo(event, emit);
       }
-    });
+      },
+    );
+
+    on<OnChangedItemTodoCompletedEvent>(
+      (event, emit) async {
+        // if (event.isCompleted != null) {
+        //   final index = todo.indexWhere((todo) => todo.id == event.todoId);
+        //   if (index != -1) {
+        //     todo[index] = TodoModel(
+        //       id: todo[index].id,
+        //       userId: todo[index].userId,
+        //       title: todo[index].title,
+        //       isCompleted: event.isCompleted!,
+        //     );
+        //   }
+        // }
+      },
+    );
 
     _scrollListener();
   }
 
-  Future _getTodos(Emitter<HomeScreenState> emit) async {
-    emit(LoadingState());
+  Future _getTodos(Emitter<HomeScreenUiState> emit) async {
+    emit(state.copyWith(isLoading: true));
+    print("CheckMoreTodoRequiredEvent");
     try {
-      itemsRetrievedCount = todo.length;
+      itemsRetrievedCount = state.todos.length;
       final todos = await todoUsease.getTodos(
         skip: itemsRetrievedCount,
         limit: itemsPerRequest,
       );
+      print("CheckMoreTodoRequiredEvent $todos");
+      print("CheckMoreTodoRequiredEvent $todos");
 
-      if (todos.isNotEmpty) {
-        todo.addAll(todos);
-      } else {
+      if (todos.isEmpty) {
         isLastItem = true;
       }
-
-      emit(SucceedGetDataState(todos));
+      List<TodoModel> updatedTodos = List.from(state.todos)..addAll(todos);
+      emit(
+        state.copyWith(
+          isLoading: false,
+          isGetTodosSuccess: true,
+          todos: updatedTodos,
+        ),
+      );
     } catch (error) {
-      emit(ErrorState(error.toString()));
+      emit(
+        state.copyWith(
+            isLoading: false,
+            isGetTodosFailed: true,
+            errorMessage: error.toString()),
+      );
     }
   }
 
-  Future _checkForMoreTodoRequired(
-      CheckMoreTodoRequiredEvent event, Emitter<HomeScreenState> emit) async {
+  Future _checkForMoreTodoRequired(CheckMoreTodoRequiredEvent event,
+      Emitter<HomeScreenUiState> emit) async {
     if (!isLastItem) {
       add(GetTodosEvent());
     }
   }
 
-  Future _getUserInfo(Emitter<HomeScreenState> emit) async {
-    await userUsecase.getUser().then((user) {
-      _user = user;
-    });
-    emit(SucceedGetUserInfoState());
+  Future _getUserInfo(Emitter<HomeScreenUiState> emit) async {
+    var user = await userUsecase.getUser();
+
+    emit(
+      state.copyWith(user: user),
+    );
   }
 
   _scrollListener() {
@@ -97,8 +121,9 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
     );
   }
 
-  Future _deleteTodo(DeleteTodo event, Emitter<HomeScreenState> emit) async {
+  Future _deleteTodo(DeleteTodo event, Emitter<HomeScreenUiState> emit) async {
     var result = await todoUsease.deleteTodo(event.todoId);
-    result ? emit(SucceedDeleteTodoState()) : emit(FailedDeleteTodoState());
+    // result ?  : emit(FailedDeleteTodoState());
+    // emit(state.copyWith(is))
   }
 }

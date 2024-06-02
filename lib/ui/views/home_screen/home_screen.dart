@@ -23,20 +23,20 @@ class HomeScreen extends StatelessWidget {
           Navigator.pushNamed(context, RoutesScreen.todoSaved);
         },
       ),
-      body: BlocBuilder<HomeScreenBloc, HomeScreenState>(
+      body: BlocBuilder<HomeScreenBloc, HomeScreenUiState>(
           builder: (BuildContext context, state) {
-        if (context.read<HomeScreenBloc>().todo.isEmpty) {
-          if (state is LoadingState) {
+        if (state.todos.isEmpty) {
+          if (state.isLoading) {
             return const ShimmerTodosView();
-          } else if (state is ErrorState) {
+          } else if (state.isGetTodosFailed && state.errorMessage != null) {
             return ErrorView(
-              message: state.message,
+              message: state.errorMessage!,
               onPressed: () {},
             );
           }
         }
 
-        if (state is SucceedDeleteTodoState) {
+        if (state.isDeleteTodoSuccess) {
           Future(() {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
@@ -46,7 +46,7 @@ class HomeScreen extends StatelessWidget {
           });
         }
 
-        if (state is FailedDeleteTodoState) {
+        if (state.isDeleteTodoFailed) {
           Future(() {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(

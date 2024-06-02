@@ -13,7 +13,7 @@ class TodosView extends StatelessWidget {
     required this.onClickMoreOptions,
   });
 
-  final HomeScreenState state;
+  final HomeScreenUiState state;
   final Function(int todoId) onClickMoreOptions;
 
   @override
@@ -23,21 +23,21 @@ class TodosView extends StatelessWidget {
       height: double.infinity,
       child: ListView.builder(
         controller: context.read<HomeScreenBloc>().scrollController,
-        itemCount: context.read<HomeScreenBloc>().todo.length +
+        itemCount: state.todos.length +
             (!context.read<HomeScreenBloc>().isLastItem ? 0 : 1),
         itemBuilder: (BuildContext context, int index) {
-          if (index == context.read<HomeScreenBloc>().todo.length - 1) {
-            if (state is LoadingState) {
+          if (index == state.todos.length - 1) {
+            if (state.isLoading) {
               return const ShimmerItemTodo();
-            } else if (state is ErrorState) {
+            } else if (state.isGetTodosFailed && state.errorMessage != null) {
               return ErrorView(
-                message: (state as ErrorState).message,
+                message: state.errorMessage!,
                 onPressed: () {},
               );
             }
           }
 
-          final todo = context.read<HomeScreenBloc>().todo[index];
+          final todo = state.todos[index];
           return ItemTodo(
             todo: todo,
             onPressed: () {

@@ -11,8 +11,9 @@ class TodoUsease {
   }) async {
     final cachedTodos =
         await repo.getTodosFromLocal(offset: skip, limit: limit);
-
+    print("cachedTodos $skip  $cachedTodos");
     if (cachedTodos.isNotEmpty) {
+      print("cachedTodos isNotEmpty");
       return cachedTodos;
     }
 
