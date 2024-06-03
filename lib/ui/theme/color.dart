@@ -33,7 +33,7 @@ mixin class ColorSystem {
   final Color darkOnError = const Color(0xFFFFFFFF);
 
   final Color darkSurface = const Color(0xFF15101C);
-  final Color darkOnSurface = const Color(0xFF9E78CF);
+  final Color darkOnSurface = const Color(0xFF777777);
 
   final Color darkCheckboxBoarder  = const Color(0xFFC6CFDC);
 
