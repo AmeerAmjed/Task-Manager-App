@@ -6,9 +6,17 @@ abstract class BaseApiService with TodoApiEndpoint {
   final Dio client;
 
   BaseApiService({required this.client}) {
-    client.options.baseUrl = baseUrl;
-    client.options.connectTimeout = const Duration(minutes: 1);
-    client.options.receiveTimeout = const Duration(minutes: 1);
+    client.options = BaseOptions(
+      baseUrl: baseUrl,
+      connectTimeout: const Duration(minutes: 1),
+      receiveTimeout: const Duration(minutes: 1),
+      responseType: ResponseType.json,
+      contentType: Headers.jsonContentType,
+      headers: {
+        'Accept': 'application/json',
+      },
+    );
+
     client.interceptors.add(LogInterceptor(responseBody: true));
   }
 
@@ -33,10 +41,11 @@ abstract class BaseApiService with TodoApiEndpoint {
           if (e.response?.statusCode == 400) {
             throw const BadRequestException(message: "Invalid credentials");
           } else {
-            throw ServerException(message: e.toString());
+            throw ServerException(
+                message: e.response?.data.toString() ?? "Unknown error");
           }
         } else {
-          throw ServerException(message: e.message ?? "");
+          throw ServerException(message: e.message ?? "Unknown error");
         }
       } else {
         throw ServerException(message: e.toString());
