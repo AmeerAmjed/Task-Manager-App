@@ -13,9 +13,9 @@ class CheckMoreTodoRequiredEvent extends HomeScreenEvent {
   const CheckMoreTodoRequiredEvent();
 }
 
-class SaveTodo extends HomeScreenEvent {
+class SaveTodoEvent extends HomeScreenEvent {
   final TodoModel todo;
-  const SaveTodo({required this.todo});
+  const SaveTodoEvent({required this.todo});
 
   List<Object?> get props => [todo];
 }

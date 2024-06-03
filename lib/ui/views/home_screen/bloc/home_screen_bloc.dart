@@ -36,15 +36,15 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenUiState> {
         await _checkForMoreTodoRequired(event, emit);
       }
 
-      if (event is SaveTodo) {
-        await todoUsease.saveTodo(event.todo) ;
-      }
-
-      if (event is DeleteTodo) {
+        if (event is DeleteTodo) {
         await _deleteTodo(event, emit);
       }
       },
     );
+
+    on<SaveTodoEvent>((event, emit) async {
+      await todoUsease.saveTodo(event.todo);
+    });
 
     on<OnChangedItemTodoCompletedEvent>(
       (event, emit) async {

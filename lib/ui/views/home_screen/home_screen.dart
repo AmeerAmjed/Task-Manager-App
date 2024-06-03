@@ -68,9 +68,22 @@ class HomeScreen extends StatelessWidget {
             },
             onClickMoreOptions: (todoId) {
               bottomSheet(
-                height: 100,
+                height: 150,
                 context: context,
                 children: <Widget>[
+                  ButtonActionBottomSheet(
+                    title: "Save",
+                    icon: Icons.bookmark,
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      context.read<HomeScreenBloc>().add(
+                            SaveTodoEvent(
+                              todo: todoId,
+                            ),
+                          );
+                    },
+                    paddingVertical: 4,
+                  ),
                   ButtonActionBottomSheet(
                     title: "Delete",
                     icon: Icons.delete,
@@ -78,7 +91,7 @@ class HomeScreen extends StatelessWidget {
                       Navigator.of(context).pop();
                       context.read<HomeScreenBloc>().add(
                             DeleteTodo(
-                              todoId: todoId,
+                              todoId: todoId.id,
                             ),
                           );
                     },

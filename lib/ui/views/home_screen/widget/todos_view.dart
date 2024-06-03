@@ -15,7 +15,7 @@ class TodosView extends StatelessWidget {
   });
 
   final HomeScreenUiState state;
-  final Function(int todoId) onClickMoreOptions;
+  final Function(TodoModel todoId) onClickMoreOptions;
   final Function(int todoId, bool? value) onChangedItemTodoCompleted;
 
   @override
@@ -43,7 +43,7 @@ class TodosView extends StatelessWidget {
           return ItemTodo(
             todo: todo,
             onPressed: () {
-              onClickMoreOptions(todo.id);
+              onClickMoreOptions(todo);
             },
             onChangedIsCompleted: (bool? value) {
               onChangedItemTodoCompleted(todo.id, value);
