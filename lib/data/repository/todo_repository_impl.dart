@@ -82,4 +82,12 @@ class TodoRepositoryImpl extends TodoRepository {
         )
         .toList());
   }
+
+  @override
+  Future<bool> updateTodoIsCompleted({
+    required int todoId,
+    required bool isCompleted,
+  }) {
+    return api.updateTodoIsCompleted(todoId: todoId, isCompleted: isCompleted);
+  }
 }

@@ -14,5 +14,7 @@ abstract class TodoRepository {
 
   Future<bool> createTodo({required String title, required bool isCompleted});
 
+  Future<bool> updateTodoIsCompleted({required int todoId, required bool isCompleted});
+
   Future<List<TodoModel>> getTodosSaved();
 }

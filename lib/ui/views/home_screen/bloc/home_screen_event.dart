@@ -27,3 +27,15 @@ class DeleteTodo extends HomeScreenEvent {
 
   List<Object?> get props => [todoId];
 }
+
+class OnChangedItemTodoCompletedEvent extends HomeScreenEvent {
+  final int todoId;
+  final bool? isCompleted;
+
+  const OnChangedItemTodoCompletedEvent({
+    required this.todoId,
+    required this.isCompleted,
+  });
+
+  List<Object?> get props => [todoId, isCompleted];
+}

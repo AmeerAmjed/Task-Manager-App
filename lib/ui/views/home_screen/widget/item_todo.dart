@@ -6,11 +6,13 @@ class ItemTodo extends StatelessWidget {
   const ItemTodo({
     super.key,
     this.onPressed,
+    this.onChangedIsCompleted,
     required this.todo,
   });
 
   final TodoModel todo;
   final Function()? onPressed;
+  final Function(bool? value)? onChangedIsCompleted;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -22,7 +24,7 @@ class ItemTodo extends StatelessWidget {
           child: Checkbox(
             activeColor: Theme.of(context).colorScheme.primary,
             value: todo.isCompleted,
-            onChanged: (bool? value) {},
+            onChanged: onChangedIsCompleted,
           ),
         ),
         trailing: IconButton(

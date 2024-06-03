@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:task_manager/data/remote/model/create_todo_params.dart';
 import 'package:task_manager/data/remote/response/delete_todo_response.dart';
 import 'package:task_manager/data/remote/response/todo_dto.dart';
+import 'package:task_manager/data/remote/response/todo_response.dart';
 import 'package:task_manager/data/remote/response/todos_response.dart';
 import 'package:task_manager/data/remote/utils/base_service.dart';
 
@@ -11,6 +12,11 @@ abstract class ApiToDoService {
   Future<DeleteTodoResponse> deleteTodo({required int todoId});
 
   Future<bool> createTodo({required CreateTodoParams todo});
+
+  Future<bool> updateTodoIsCompleted({
+    required int todoId,
+    required bool isCompleted,
+  });
 }
 
 class ApiToDoServiceImpl extends BaseApiService implements ApiToDoService {
@@ -68,5 +74,21 @@ class ApiToDoServiceImpl extends BaseApiService implements ApiToDoService {
     ).then((value) {
       return true;
     });
+  }
+
+  @override
+  Future<bool> updateTodoIsCompleted({
+    required int todoId,
+    required bool isCompleted,
+  }) async {
+    return await tryRequest<TodoResponse>(
+      client.put(
+        '/todos/$todoId',
+        data: {
+          "completed": isCompleted,
+        },
+      ),
+      (json) => TodoResponse.fromJson(json),
+    ).then((todo) => todo.id == todoId);
   }
 }

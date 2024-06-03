@@ -11,10 +11,12 @@ class TodosView extends StatelessWidget {
     super.key,
     required this.state,
     required this.onClickMoreOptions,
+    required this.onChangedItemTodoCompleted,
   });
 
   final HomeScreenUiState state;
   final Function(int todoId) onClickMoreOptions;
+  final Function(int todoId, bool? value) onChangedItemTodoCompleted;
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +44,9 @@ class TodosView extends StatelessWidget {
             todo: todo,
             onPressed: () {
               onClickMoreOptions(todo.id);
+            },
+            onChangedIsCompleted: (bool? value) {
+              onChangedItemTodoCompleted(todo.id, value);
             },
           );
         },

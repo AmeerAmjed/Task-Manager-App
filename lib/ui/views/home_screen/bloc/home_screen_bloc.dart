@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -46,17 +48,18 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenUiState> {
 
     on<OnChangedItemTodoCompletedEvent>(
       (event, emit) async {
-        // if (event.isCompleted != null) {
-        //   final index = todo.indexWhere((todo) => todo.id == event.todoId);
-        //   if (index != -1) {
-        //     todo[index] = TodoModel(
-        //       id: todo[index].id,
-        //       userId: todo[index].userId,
-        //       title: todo[index].title,
-        //       isCompleted: event.isCompleted!,
-        //     );
-        //   }
-        // }
+        if (event.isCompleted != null) {
+          _updateTodoIsCompleted(
+            todoId: event.todoId,
+            isCompleted: event.isCompleted!,
+          );
+
+          await _updateTodosState(
+            todoId: event.todoId,
+            isCompleted: event.isCompleted!,
+            emit: emit,
+          );
+        }
       },
     );
 
@@ -118,6 +121,38 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenUiState> {
           add(const CheckMoreTodoRequiredEvent());
         }
       },
+    );
+  }
+
+  Future<bool> _updateTodoIsCompleted({
+    required int todoId,
+    required bool isCompleted,
+  }) async {
+    return await todoUsease.updateTodoIsCompleted(
+        todoId: todoId, isCompleted: isCompleted);
+  }
+
+  _updateTodosState({
+    required int todoId,
+    required bool isCompleted,
+    required Emitter<HomeScreenUiState> emit,
+  }) async {
+    final updatedTodos = List<TodoModel>.from(state.todos);
+    final index = updatedTodos.indexWhere((todo) => todo.id == todoId);
+
+    if (index != -1) {
+      updatedTodos[index] = TodoModel(
+        id: updatedTodos[index].id,
+        userId: updatedTodos[index].userId,
+        title: updatedTodos[index].title,
+        isCompleted: isCompleted,
+      );
+    }
+
+    emit(
+      state.copyWith(
+        todos: updatedTodos,
+      ),
     );
   }
 

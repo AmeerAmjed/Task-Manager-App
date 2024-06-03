@@ -45,6 +45,13 @@ class TodoUsease {
     );
   }
 
+  Future<bool> updateTodoIsCompleted({
+    required int todoId,
+    required bool isCompleted,
+  }) {
+    return repo.updateTodoIsCompleted(todoId: todoId, isCompleted: isCompleted);
+  }
+
   Future<List<TodoModel>> getTodosSaved() {
     return repo.getTodosSaved();
   }

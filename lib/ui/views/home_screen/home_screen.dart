@@ -58,6 +58,14 @@ class HomeScreen extends StatelessWidget {
 
         return TodosView(
             state: state,
+            onChangedItemTodoCompleted: (int todoId, bool? value) {
+              context.read<HomeScreenBloc>().add(
+                    OnChangedItemTodoCompletedEvent(
+                      todoId: todoId,
+                      isCompleted: value,
+                    ),
+                  );
+            },
             onClickMoreOptions: (todoId) {
               bottomSheet(
                 height: 100,
