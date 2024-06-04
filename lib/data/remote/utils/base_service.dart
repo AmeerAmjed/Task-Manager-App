@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:task_manager/data/remote/utils/auth_interceptor.dart';
 import 'package:task_manager/data/remote/utils/todo_api_endpoint.dart';
 import 'package:task_manager/utils/handle_error.dart';
 
@@ -17,6 +18,7 @@ abstract class BaseApiService with TodoApiEndpoint {
       },
     );
 
+    client.interceptors.add(AuthInterceptor());
     client.interceptors.add(LogInterceptor(responseBody: true));
   }
 

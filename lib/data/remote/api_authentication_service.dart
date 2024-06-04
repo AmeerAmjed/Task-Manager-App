@@ -1,18 +1,18 @@
 import 'package:dio/dio.dart';
 import 'package:task_manager/data/remote/response/login_response.dart';
-import 'package:task_manager/data/remote/utils/todo_api_endpoint.dart';
+import 'package:task_manager/data/remote/utils/base_service.dart';
 import 'package:task_manager/utils/handle_error.dart';
 
 abstract class ApiAuthenticationService {
   Future<LoginResponse> login(
       {required String username, required String password});
+
+  Future<LoginResponse> refreshToken();
 }
 
-class ApiAuthenticationServiceImpl extends ApiAuthenticationService
-    with TodoApiEndpoint {
-  ApiAuthenticationServiceImpl({required this.client});
-
-  final Dio client;
+class ApiAuthenticationServiceImpl extends BaseApiService
+    implements ApiAuthenticationService {
+  ApiAuthenticationServiceImpl({required super.client});
 
   @override
   Future<LoginResponse> login({
@@ -49,5 +49,13 @@ class ApiAuthenticationServiceImpl extends ApiAuthenticationService
         throw ServerException(message: e.toString());
       }
     }
+  }
+
+  @override
+  Future<LoginResponse> refreshToken() async {
+    return await tryRequest(
+      client.post('/auth/refresh'),
+      (body) => LoginResponse.fromJson(body),
+    );
   }
 }
