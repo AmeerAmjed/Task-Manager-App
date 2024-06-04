@@ -1,3 +1,4 @@
+import 'package:task_manager/data/local/local_secure_data_source.dart';
 import 'package:task_manager/data/local/local_user_data_source.dart';
 import 'package:task_manager/data/local/mapper/to_user_entity.dart';
 import 'package:task_manager/data/local/mapper/to_user_model.dart';
@@ -6,11 +7,16 @@ import 'package:task_manager/data/remote/mapper/to_user_model.dart';
 import 'package:task_manager/domain/model/user_model.dart';
 import 'package:task_manager/domain/repository/authentication_repository.dart';
 
-class AuthenticationRepositoryImpl extends AuthenticationRepository {
+class AuthenticationRepositoryImpl extends LocalSecureDataSourceImpl
+    implements AuthenticationRepository {
+  AuthenticationRepositoryImpl(
+    super._secureStorage, {
+    required this.authentication,
+    required this.userLocalDataSource,
+  });
+
   final ApiAuthenticationService authentication;
   final UserLocalDataSource userLocalDataSource;
-
-  AuthenticationRepositoryImpl(this.authentication, this.userLocalDataSource);
 
   @override
   Future<UserModel> login({
@@ -22,6 +28,7 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
         .then((user) {
       print("object $user");
       userLocalDataSource.saveUser(user.toUserModel().toUserEntity());
+      saveToken(user.token);
       return user.toUserModel();
     });
   }

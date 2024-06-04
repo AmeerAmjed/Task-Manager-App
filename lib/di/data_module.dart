@@ -9,10 +9,11 @@ void setupDataModule() {
 
   getIt.registerLazySingleton<AuthenticationRepository>(
     () => AuthenticationRepositoryImpl(
-      ApiAuthenticationServiceImpl(
+      getIt.get<FlutterSecureStorage>(),
+      authentication: ApiAuthenticationServiceImpl(
         client: getIt.get<Dio>(),
       ),
-      getIt.get<UserLocalDataSource>(),
+      userLocalDataSource: getIt.get<UserLocalDataSource>(),
     ),
   );
 
@@ -22,5 +23,12 @@ void setupDataModule() {
 
   getIt.registerLazySingleton<LocalTodosCacheDataSource>(
     () => LocalTodosCacheDataSourceImpl(),
+  );
+
+  getIt.registerLazySingleton<FlutterSecureStorage>(
+    () => const FlutterSecureStorage(
+      iOptions: IOSOptions(accessibility: KeychainAccessibility.first_unlock),
+      aOptions: AndroidOptions(encryptedSharedPreferences: true),
+    ),
   );
 }
