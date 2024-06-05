@@ -41,8 +41,17 @@ class AuthenticationRepositoryImpl extends LocalSecureDataSourceImpl
   @override
   Future<UserModel?> getUser() {
     return userLocalDataSource.getUser().then((user) {
-      if (user != null) user.toUserModel();
+      if (user != null) return user.toUserModel();
       return null;
     });
   }
+
+  @override
+  Future<bool> isUserLogin() async {
+    return await _isUserNotNull() && await _isUserTokenNotNull();
+  }
+
+  Future<bool> _isUserNotNull() async => await getUser() != null;
+
+  Future<bool> _isUserTokenNotNull() async => await getToken() != null;
 }
