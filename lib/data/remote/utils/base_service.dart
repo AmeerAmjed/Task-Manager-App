@@ -18,7 +18,7 @@ abstract class BaseApiService with TodoApiEndpoint {
       },
     );
 
-    client.interceptors.add(AuthInterceptor());
+    //client.interceptors.add(AuthInterceptor());
     client.interceptors.add(LogInterceptor(responseBody: true));
   }
 
