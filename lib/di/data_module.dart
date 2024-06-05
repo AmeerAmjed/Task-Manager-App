@@ -31,4 +31,12 @@ void setupDataModule() {
       aOptions: AndroidOptions(encryptedSharedPreferences: true),
     ),
   );
+
+  getIt.registerLazySingleton<ApiAuthenticationService>(
+    () => ApiAuthenticationServiceImpl(client: getIt.get<Dio>()),
+  );
+
+  getIt.registerLazySingleton<LocalSecureDataSource>(
+    () => LocalSecureDataSourceImpl(getIt.get<FlutterSecureStorage>()),
+  );
 }
