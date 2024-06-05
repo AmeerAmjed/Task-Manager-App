@@ -15,7 +15,7 @@ class UserUsecase {
         .then((value) => true);
   }
 
-  Future<UserModel> getUser(){
+  Future<UserModel?> getUser(){
     return _repo.getUser();
   }
 }

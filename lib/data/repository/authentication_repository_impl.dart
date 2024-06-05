@@ -39,7 +39,10 @@ class AuthenticationRepositoryImpl extends LocalSecureDataSourceImpl
   }
 
   @override
-  Future<UserModel> getUser() {
-    return userLocalDataSource.getUser().then((user) => user.toUserModel());
+  Future<UserModel?> getUser() {
+    return userLocalDataSource.getUser().then((user) {
+      if (user != null) user.toUserModel();
+      return null;
+    });
   }
 }

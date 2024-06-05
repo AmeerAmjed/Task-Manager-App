@@ -4,7 +4,7 @@ import 'package:task_manager/data/local/table/user_table.dart';
 abstract class UserLocalDataSource {
   saveUser(UserEntity user);
 
-  Future<UserEntity> getUser();
+  Future<UserEntity?> getUser();
 
   Future<int> getUserId();
 }
@@ -17,9 +17,10 @@ class UserLocalDataSourceImpl extends UserTable implements UserLocalDataSource {
   }
 
   @override
-  Future<UserEntity> getUser() {
+  Future<UserEntity?> getUser() {
     return queryById(userIdLocal).then((value) {
-      return  UserEntity.fromJson(value.first);
+      if (value.first.isNotEmpty) return UserEntity.fromJson(value.first);
+      return null;
     });
   }
 
