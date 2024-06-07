@@ -9,7 +9,7 @@ mixin class Dimens {
   static const double spacing45 = 45.0;
   static const double spacing96 = 96.0;
 
-  static const double radiusSmall = 4.0;
+  static const double radius8 = 8.0;
   static const double radius16 = 16.0;
   static const double radiusFull = 25.0;
 
@@ -20,4 +20,6 @@ mixin class Dimens {
   static const double fontSize20 = 20.0;
 
   static const double icon24 = 24.0;
+
+  static const double heightButton = 50.0;
 }

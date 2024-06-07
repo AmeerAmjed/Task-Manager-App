@@ -4,7 +4,8 @@ import 'package:task_manager/ui/route/routes_screen.dart';
 import 'package:task_manager/ui/utils/dimens.dart';
 import 'package:task_manager/ui/utils/input_validation.dart';
 import 'package:task_manager/ui/views/login_screen/bloc/login_screen_bloc.dart';
-import 'package:task_manager/ui/widget/loading.dart';
+import 'package:task_manager/ui/views/login_screen/widget/custom_text_form_field.dart';
+import 'package:task_manager/ui/widget/custom_button.dart';
 import 'package:task_manager/ui/widget/vertical_space.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -25,38 +26,31 @@ class LoginScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 const VerticalSpace96(),
-                const Text(
+                Text(
                   'Login',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 30,
-                  ),
+                  style: Theme.of(context).textTheme.headlineLarge,
                 ),
-                const Text(
+                Text(
                   'Please sing in to continue.',
-                  style: TextStyle(fontSize: 20),
+                  style: Theme.of(context).textTheme.bodyLarge,
                 ),
                 const VerticalSpace45(),
-                TextFormField(
+                CustomTextFormField(
+                  label: 'User Name',
                   controller: bloc.usernameController,
                   validator: (username) =>
                       bloc.checkValidateUserName(username).message,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'User Name',
-                  ),
                 ),
                 const VerticalSpace16(),
-                TextFormField(
-                  obscureText: true,
+                CustomTextFormField(
+                  label: 'Password',
                   controller: bloc.passwordController,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Password',
-                  ),
                   validator: (password) =>
                       bloc.checkValidatePassword(password).message,
+                  textInputAction: TextInputAction.done,
+                  onFieldSubmitted: (_) {
+                    BlocProvider.of<LoginScreenBloc>(context).add(Submitted());
+                  },
                 ),
                 BlocConsumer<LoginScreenBloc, LoginScreenState>(
                   listener: (context, state) {
@@ -73,27 +67,13 @@ class LoginScreen extends StatelessWidget {
                     }
                   },
                   builder: (context, state) {
-                    return Container(
-                      height: 50,
-                      margin: const EdgeInsets.symmetric(
-                        vertical: Dimens.spacing16,
-                      ),
-                      child: ElevatedButton(
-                        onPressed: state is LoadingState
-                            ? null
-                            : () {
-                                BlocProvider.of<LoginScreenBloc>(context)
-                                    .add(Submitted());
-                              },
-                        child: BlocBuilder<LoginScreenBloc, LoginScreenState>(
-                            builder: (BuildContext context, state) {
-                          if (state is LoadingState) {
-                            return const Loading();
-                          }
-
-                          return const Text('Submit');
-                        }),
-                      ),
+                    return CustomButton(
+                      label: 'Submit',
+                      isLoading: true,
+                      onPressed: () {
+                        BlocProvider.of<LoginScreenBloc>(context)
+                            .add(Submitted());
+                      },
                     );
                   },
                 ),

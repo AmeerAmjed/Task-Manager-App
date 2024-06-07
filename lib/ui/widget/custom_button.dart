@@ -6,11 +6,11 @@ class CustomButton extends StatelessWidget {
   const CustomButton({
     super.key,
     required this.onPressed,
-    required this.child,
+    required this.label,
     this.isLoading = false,
   });
 
-  final Widget child;
+  final String label;
   final bool isLoading;
   final void Function() onPressed;
 
@@ -37,7 +37,15 @@ class CustomButton extends StatelessWidget {
           ),
         ),
         onPressed: isLoading ? null : onPressed,
-        child: isLoading ? const LoadingIndicator() : child,
+        child: isLoading
+            ? const LoadingIndicator()
+            : Text(
+                label,
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontSize: Dimens.fontSize18,
+                      color: Theme.of(context).colorScheme.onPrimary,
+                    ),
+              ),
       ),
     );
   }
