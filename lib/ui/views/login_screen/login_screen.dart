@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:task_manager/ui/utils/dimens.dart';
 import 'package:task_manager/ui/utils/input_validation.dart';
+import 'package:task_manager/ui/views/home_screen/home_route.dart';
 import 'package:task_manager/ui/views/login_screen/bloc/login_screen_bloc.dart';
 import 'package:task_manager/ui/views/login_screen/widget/custom_text_form_field.dart';
 import 'package:task_manager/ui/widget/custom_button.dart';
@@ -73,12 +75,12 @@ class LoginScreen extends StatelessWidget {
                 BlocConsumer<LoginScreenBloc, LoginScreenUiState>(
                   listener: (context, state) {
                     if (state.isLoginSuccess) {
-                      // Navigator.popAndPushNamed(context, RoutesScreen.home);
                       toast(
                         "Login Success",
                         backgroundColor: Theme.of(context).colorScheme.primary,
                         textColor: Theme.of(context).colorScheme.onPrimary,
                       );
+                      context.go(homeRoute.path);
                     } else if (state.isLoginFailed) {
                       toast(
                         state.errorMessage!,
