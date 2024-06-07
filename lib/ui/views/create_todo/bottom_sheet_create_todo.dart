@@ -5,7 +5,7 @@ import 'package:task_manager/ui/utils/input_validation.dart';
 import 'package:task_manager/ui/views/create_todo/bloc/create_todo_bloc.dart';
 import 'package:task_manager/ui/views/create_todo/widget/input_create_todo.dart';
 import 'package:task_manager/ui/widget/bottom_sheet.dart';
-import 'package:task_manager/ui/widget/loading.dart';
+import 'package:task_manager/ui/widget/loading_indicator.dart';
 
 void bottomSheetCreateTodo(
   BuildContext context,
@@ -96,7 +96,7 @@ void bottomSheetCreateTodo(
                           createTodoBloc.add(SubmittedCreateTodoEvent());
                         },
                   child: state is LoadingUploadTodo
-                      ? const Loading()
+                      ? const LoadingIndicator()
                       : Text(
                           'Create',
                           style: Theme.of(context)
