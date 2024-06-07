@@ -5,6 +5,7 @@ import 'package:task_manager/ui/utils/input_validation.dart';
 import 'package:task_manager/ui/views/login_screen/bloc/login_screen_bloc.dart';
 import 'package:task_manager/ui/views/login_screen/widget/custom_text_form_field.dart';
 import 'package:task_manager/ui/widget/custom_button.dart';
+import 'package:task_manager/ui/widget/toast.dart';
 import 'package:task_manager/ui/widget/vertical_space.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -13,7 +14,25 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bloc = context.read<LoginScreenBloc>();
-
+    final snackBar = SnackBar(
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      dismissDirection: DismissDirection.none,
+      padding: EdgeInsets.zero,
+      margin: const EdgeInsets.only(bottom: 15),
+      behavior: SnackBarBehavior.floating,
+      duration: const Duration(seconds: 2),
+      content: Center(
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(50),
+            color: Color(0xff656565),
+          ),
+          child: const Text('Click exit again to close app!'),
+        ),
+      ),
+    );
     return Scaffold(
       body: SafeArea(
         child: Form(
@@ -55,13 +74,17 @@ class LoginScreen extends StatelessWidget {
                   listener: (context, state) {
                     if (state.isLoginSuccess) {
                       // Navigator.popAndPushNamed(context, RoutesScreen.home);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                            content: Text('Form Submitted Successfully!')),
+                      toast(
+                        "Login Success",
+                        backgroundColor: Theme.of(context).colorScheme.primary,
+                        textColor: Theme.of(context).colorScheme.onPrimary,
                       );
                     } else if (state.isLoginFailed) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(state.errorMessage!)),
+                      toast(
+                        state.errorMessage!,
+                        backgroundColor:
+                            Theme.of(context).colorScheme.errorContainer,
+                        textColor: Theme.of(context).colorScheme.onPrimary,
                       );
                     }
                   },
