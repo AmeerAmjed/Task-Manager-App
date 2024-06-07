@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:task_manager/ui/route/routes_screen.dart';
 import 'package:task_manager/ui/utils/dimens.dart';
 import 'package:task_manager/ui/utils/input_validation.dart';
 import 'package:task_manager/ui/views/login_screen/bloc/login_screen_bloc.dart';
@@ -49,30 +48,29 @@ class LoginScreen extends StatelessWidget {
                       bloc.checkValidatePassword(password).message,
                   textInputAction: TextInputAction.done,
                   onFieldSubmitted: (_) {
-                    BlocProvider.of<LoginScreenBloc>(context).add(Submitted());
+                    bloc.add(Submitted());
                   },
                 ),
-                BlocConsumer<LoginScreenBloc, LoginScreenState>(
+                BlocConsumer<LoginScreenBloc, LoginScreenUiState>(
                   listener: (context, state) {
-                    if (state is IsLoginSuccess) {
-                      Navigator.popAndPushNamed(context, RoutesScreen.home);
+                    if (state.isLoginSuccess) {
+                      // Navigator.popAndPushNamed(context, RoutesScreen.home);
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                             content: Text('Form Submitted Successfully!')),
                       );
-                    } else if (state is IsLoginFailure) {
+                    } else if (state.isLoginFailed) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(state.message)),
+                        SnackBar(content: Text(state.errorMessage!)),
                       );
                     }
                   },
                   builder: (context, state) {
                     return CustomButton(
                       label: 'Submit',
-                      isLoading: true,
+                      isLoading: state.isLoading,
                       onPressed: () {
-                        BlocProvider.of<LoginScreenBloc>(context)
-                            .add(Submitted());
+                        bloc.add(Submitted());
                       },
                     );
                   },

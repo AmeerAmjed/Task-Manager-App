@@ -9,7 +9,7 @@ import 'package:task_manager/utils/handle_error.dart';
 part 'login_screen_event.dart';
 part 'login_screen_state.dart';
 
-class LoginScreenBloc extends Bloc<LoginScreenEvent, LoginScreenState>
+class LoginScreenBloc extends Bloc<LoginScreenEvent, LoginScreenUiState>
     with InputValidation {
   final GlobalKey<FormState> formLoginKey = GlobalKey<FormState>();
   final TextEditingController usernameController = TextEditingController();
@@ -17,34 +17,53 @@ class LoginScreenBloc extends Bloc<LoginScreenEvent, LoginScreenState>
   final UserUsecase authentication =
       getIt.get<UserUsecase>();
 
-  LoginScreenBloc() : super(LoginScreenInitial()) {
-    on<LoginScreenEvent>((event, emit) async {
-      if (event is Submitted) {
-        await _onSubmitted(event, emit);
-      }
+  LoginScreenBloc() : super(const LoginScreenInitialState()) {
+    on<LoginScreenEvent>((event, emit) async {});
+
+    on<Submitted>((event, emit) async {
+      await _onSubmitted(event, emit);
     });
   }
 
-  Future _onSubmitted(Submitted event, Emitter<LoginScreenState> emit) async {
+  Future _onSubmitted(Submitted event, Emitter<LoginScreenUiState> emit) async {
     if (_checkFormValidation()) {
-      emit(LoadingState());
+      emit(state.copyWith(isLoading: true));
       try {
         final response = await authentication.login(
           username: usernameController.text.trim(),
           password: passwordController.text.trim(),
         );
         if (response) {
-          emit(IsLoginSuccess());
+          emit(state.copyWith(
+            isLoading: false,
+            isLoginSuccess: true,
+          ));
         } else {
-          emit(const IsLoginFailure("error"));
+          emit(state.copyWith(
+            isLoading: false,
+            isLoginFailed: true,
+            errorMessage: "error",
+          ));
         }
       } on Exception catch (e) {
         if (e is BadRequestException) {
-          emit(IsLoginFailure(e.message ?? ""));
+          emit(state.copyWith(
+            isLoading: false,
+            isLoginFailed: true,
+            errorMessage: e.message,
+          ));
         } else if (e is ServerException) {
-          emit(IsLoginFailure(e.message ?? ""));
+          emit(state.copyWith(
+            isLoading: false,
+            isLoginFailed: true,
+            errorMessage: e.message,
+          ));
         } else {
-          emit(const IsLoginFailure("An unknown error occurred"));
+          emit(state.copyWith(
+            isLoading: false,
+            isLoginFailed: true,
+            errorMessage: "An unknown error occurred",
+          ));
         }
       }
     }
