@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:task_manager/ui/route/routes_screen.dart';
+import 'package:go_router/go_router.dart';
 import 'package:task_manager/ui/views/home_screen/bloc/home_screen_bloc.dart';
 import 'package:task_manager/ui/views/home_screen/widget/button_add_todo.dart';
 import 'package:task_manager/ui/views/home_screen/widget/home_app_bar.dart';
 import 'package:task_manager/ui/views/home_screen/widget/todos_view.dart';
+import 'package:task_manager/ui/views/todos_saved_screen/todos_saved_route.dart';
 import 'package:task_manager/ui/widget/bottom_sheet.dart';
 import 'package:task_manager/ui/widget/error_view.dart';
 
@@ -20,7 +21,7 @@ class HomeScreen extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       appBar: HomeAppBar(
         onClickSavedAction: () {
-          Navigator.pushNamed(context, RoutesScreen.todoSaved);
+          context.push(todosSavedRoute.path);
         },
       ),
       body: BlocBuilder<HomeScreenBloc, HomeScreenUiState>(
