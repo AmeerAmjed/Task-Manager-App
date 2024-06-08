@@ -17,11 +17,21 @@ mixin class AppRouter {
       homeRoute,
       todosSavedRoute,
     ],
+    initialLocation: homeRoute.path,
     redirect: (BuildContext context, GoRouterState state) async {
       bool isLogin = await getIt.get<AuthenticationRepository>().isUserLogin();
-      if (isLogin) return homeRoute.path;
 
-      return loginRoute.path;
+      final currentPath = state.uri.toString();
+
+      if (!isLogin && currentPath != loginRoute.path) {
+        return loginRoute.path;
+      }
+
+      if (isLogin && currentPath == loginRoute.path) {
+        return homeRoute.path;
+      }
+
+      return null;
     },
   );
 
