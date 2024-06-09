@@ -17,3 +17,5 @@ class UnsavedTodoEvent extends TodosSavedScreenEvent {
   @override
   List<Object> get props => [todoId];
 }
+
+class UpdateTodosEvent extends TodosSavedScreenEvent {}

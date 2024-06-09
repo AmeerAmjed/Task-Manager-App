@@ -58,7 +58,19 @@ class TodosSavedScreenBloc
     Emitter<TodosSavedScreenUiState> emit,
   ) async {
     await todoUsease.unSaveTodo(event.todoId);
+    upDateTodosByRemoveTodoFromListById(event.todoId, emit);
   }
 
-
+  upDateTodosByRemoveTodoFromListById(
+    int todoId,
+    Emitter<TodosSavedScreenUiState> emit,
+  ) {
+    if (state.todos.isNotEmpty) {
+      final todos = List<TodoModel>.from(state.todos);
+      todos.removeWhere((todos) => todos.id == todoId);
+      emit(state.copyWith(todos: todos));
+    } else {
+      emit(state.copyWith(isEmpty: true));
+    }
+  }
 }
