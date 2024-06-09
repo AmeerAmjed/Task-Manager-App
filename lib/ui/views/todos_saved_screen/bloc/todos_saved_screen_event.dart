@@ -8,3 +8,12 @@ abstract class TodosSavedScreenEvent extends Equatable {
 }
 
 class GetTodosSavedEvent extends TodosSavedScreenEvent {}
+
+class UnsavedTodoEvent extends TodosSavedScreenEvent {
+  final int todoId;
+
+  const UnsavedTodoEvent({required this.todoId});
+
+  @override
+  List<Object> get props => [todoId];
+}

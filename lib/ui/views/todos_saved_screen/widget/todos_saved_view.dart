@@ -3,9 +3,14 @@ import 'package:task_manager/domain/model/todo_model.dart';
 import 'package:task_manager/ui/views/home_screen/widget/item_todo.dart';
 
 class TodosSavedView extends StatelessWidget {
-  const TodosSavedView({super.key, required this.todos});
+  const TodosSavedView({
+    super.key,
+    required this.todos,
+    required this.onClickMoreOptions,
+  });
 
   final List<TodoModel> todos;
+  final Function(int todoId) onClickMoreOptions;
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +23,7 @@ class TodosSavedView extends StatelessWidget {
           return ItemTodo(
             todo: todos[index],
             onPressed: () {
+              onClickMoreOptions(todos[index].id);
             },
           );
         },

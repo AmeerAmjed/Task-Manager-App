@@ -22,6 +22,10 @@ class TodosSavedScreenBloc
         await _getTodos(event, emit);
       }
     });
+
+    on<UnsavedTodoEvent>((event, emit) async {
+      await _unSaveTodo(event, emit);
+    });
   }
 
   Future _getTodos(
@@ -42,5 +46,13 @@ class TodosSavedScreenBloc
       emit(ErrorState(error.toString()));
     }
   }
+
+  Future _unSaveTodo(
+    UnsavedTodoEvent event,
+    Emitter<TodosSavedScreenState> emit,
+  ) async {
+    await todoUsease.unSaveTodo(event.todoId);
+  }
+
 
 }

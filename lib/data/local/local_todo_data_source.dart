@@ -4,10 +4,7 @@ import 'package:task_manager/data/local/table/todo_saved_tablle.dart';
 abstract class LocalTodoDataSource {
   Future<int> saveTodo(TodoEntity todo);
 
-  Future<List<TodoEntity>> getTodos({
-    required int offset,
-    required int limit,
-  });
+  Future<void> unSaveTodoInLocal(int todoId);
 
   Future<List<TodoEntity>> getTodosSaved();
 }
@@ -19,14 +16,8 @@ class LocalTodoDataSourceImpl extends TodoSavedTable implements LocalTodoDataSou
   }
 
   @override
-  Future<List<TodoEntity>> getTodos({
-    required int offset,
-    required int limit,
-  }) async {
-    return await getDataWithPagination(offset: offset, limit: limit)
-        .then((todos) {
-      return todos.map((todo) => TodoEntity.fromJson(todo)).toList();
-    });
+  Future<void> unSaveTodoInLocal(int todoId) async {
+    await delete(todoId);
   }
 
   @override

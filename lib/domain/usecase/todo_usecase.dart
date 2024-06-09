@@ -31,6 +31,10 @@ class TodoUsease {
     }
   }
 
+  Future<void> unSaveTodo(int todoId) async {
+    await repo.unSaveTodoInLocal(todoId);
+  }
+
   Future<bool> deleteTodo(int todoId) async {
     return await repo.deleteTodo(todoId);
   }
