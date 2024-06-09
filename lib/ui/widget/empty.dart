@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:task_manager/ui/utils/dimens.dart';
 import 'package:task_manager/ui/widget/vertical_space.dart';
 
 class Empty extends StatelessWidget {
@@ -33,10 +34,16 @@ class Empty extends StatelessWidget {
         ),
         const VerticalSpace8(),
         if (description != null)
-          Center(
-            child: Text(
-              description!,
-              style: Theme.of(context).textTheme.bodyMedium,
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: Dimens.spacing16,
+            ),
+            child: Center(
+              child: Text(
+                description!,
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
             ),
           ),
         const Spacer(flex: 2)
