@@ -9,14 +9,10 @@ part 'todos_saved_screen_event.dart';
 part 'todos_saved_screen_state.dart';
 
 class TodosSavedScreenBloc
-    extends Bloc<TodosSavedScreenEvent, TodosSavedScreenState> {
+    extends Bloc<TodosSavedScreenEvent, TodosSavedScreenUiState> {
   final TodoUsease todoUsease = getIt.get<TodoUsease>();
 
-  final List<TodoModel> _todos = [];
-
-  List<TodoModel> get todos => _todos;
-
-  TodosSavedScreenBloc() : super(LoadingState()) {
+  TodosSavedScreenBloc() : super(TodosSavedScreenInitialState()) {
     on<TodosSavedScreenEvent>((event, emit) async {
       if (event is GetTodosSavedEvent) {
         await _getTodos(event, emit);
@@ -30,26 +26,36 @@ class TodosSavedScreenBloc
 
   Future _getTodos(
     GetTodosSavedEvent event,
-    Emitter<TodosSavedScreenState> emit,
+    Emitter<TodosSavedScreenUiState> emit,
   ) async {
-    emit(LoadingState());
+    emit(state.copyWith(isLoading: true));
     try {
-      final resultTodos = await todoUsease.getTodosSaved();
+      final todos = await todoUsease.getTodosSaved();
 
-      if (resultTodos.isNotEmpty) {
-        todos.addAll(resultTodos);
-        emit(SucceedGetDataState(todos));
+      if (todos.isNotEmpty) {
+        emit(state.copyWith(
+          isLoading: false,
+          isGetTodosSuccess: false,
+          todos: todos,
+        ));
       } else {
-        emit(EmptyState());
+        emit(state.copyWith(
+          isLoading: false,
+          isEmpty: true,
+        ));
       }
     } catch (error) {
-      emit(ErrorState(error.toString()));
+      emit(state.copyWith(
+        isLoading: false,
+        isGetTodosFailed: true,
+        errorMessage: error.toString(),
+      ));
     }
   }
 
   Future _unSaveTodo(
     UnsavedTodoEvent event,
-    Emitter<TodosSavedScreenState> emit,
+    Emitter<TodosSavedScreenUiState> emit,
   ) async {
     await todoUsease.unSaveTodo(event.todoId);
   }

@@ -12,6 +12,8 @@ class TodosSavedScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bloc = context.read<TodosSavedScreenBloc>();
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -22,37 +24,37 @@ class TodosSavedScreen extends StatelessWidget {
         ),
       ),
       body: SafeArea(
-        child: BlocBuilder<TodosSavedScreenBloc, TodosSavedScreenState>(
+        child: BlocBuilder<TodosSavedScreenBloc, TodosSavedScreenUiState>(
             builder: (BuildContext context, state) {
-          if (context.read<TodosSavedScreenBloc>().todos.isEmpty) {
-            if (state is LoadingState) {
+          if (state.todos.isEmpty) {
+            if (state.isLoading) {
               return const ShimmerTodosView();
             }
-            if (state is EmptyState) {
+            if (state.isEmpty) {
               return const EmptyTodoSaved();
-            } else if (state is ErrorState) {
+            } else if (state.isGetTodosFailed) {
               return ErrorView(
-                message: state.message,
+                message: state.errorMessage ?? "",
                 onPressed: () {},
               );
             }
           }
           return TodosSavedView(
-            todos: context.read<TodosSavedScreenBloc>().todos,
+              todos: state.todos,
               onClickMoreOptions: (int todoId) {
                 bottomSheet(
-                  height: 150,
+                  height: 80,
                   context: context,
                   children: <Widget>[
                     ButtonActionBottomSheet(
-                      title: "Remove",
+                      title: "UnSave",
                       icon: Icons.bookmark_remove,
                       onPressed: () {
                         Navigator.of(context).pop();
-                        context.read<TodosSavedScreenBloc>().add(
-                              UnsavedTodoEvent(
-                                todoId: todoId,
-                              ),
+                        bloc.add(
+                          UnsavedTodoEvent(
+                            todoId: todoId,
+                          ),
                             );
                       },
                       paddingVertical: 4,
