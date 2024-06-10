@@ -25,25 +25,25 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenUiState> {
 
   HomeScreenBloc() : super(const HomeScreenInitialUiState()) {
     on<HomeScreenEvent>((event, emit) async {
-      if (event is GetDataEvent) {
-        await _getTodos(emit);
-        await _getUserInfo(emit);
-      }
-      if (event is GetTodosEvent) {
-        await _getTodos(emit);
-      }
-      if (event is CheckMoreTodoRequiredEvent) {
-        await _checkForMoreTodoRequired(event, emit);
-      }
 
-        if (event is DeleteTodo) {
-        await _deleteTodo(event, emit);
-      }
       },
     );
 
+    on<GetTodosEvent>((event, emit) async {
+      await _getTodos(emit);
+      await _getUserInfo(emit);
+    });
+
+    on<CheckMoreTodoRequiredEvent>((event, emit) async {
+      await _checkForMoreTodoRequired(event, emit);
+    });
+
     on<SaveTodoEvent>((event, emit) async {
       await todoUsease.saveTodo(event.todo);
+    });
+
+    on<DeleteTodo>((event, emit) async {
+      await _deleteTodo(event, emit);
     });
 
     on<OnChangedItemTodoCompletedEvent>(
