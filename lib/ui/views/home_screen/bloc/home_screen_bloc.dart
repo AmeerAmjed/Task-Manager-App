@@ -158,7 +158,8 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenUiState> {
 
   Future _deleteTodo(DeleteTodo event, Emitter<HomeScreenUiState> emit) async {
     var result = await todoUsease.deleteTodo(event.todoId);
-    // result ?  : emit(FailedDeleteTodoState());
-    // emit(state.copyWith(is))
+    result
+        ? emit(state.copyWith(isDeleteTodoSuccess: true))
+        : emit(state.copyWith(isDeleteTodoFailed: true));
   }
 }
