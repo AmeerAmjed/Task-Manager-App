@@ -11,6 +11,7 @@ class ToDoApp extends StatelessWidget with AppRouter {
       routeInformationProvider: AppRouter.router.routeInformationProvider,
       routeInformationParser: AppRouter.router.routeInformationParser,
       routerDelegate: AppRouter.router.routerDelegate,
+      debugShowCheckedModeBanner: false,
       title: 'Task Manager',
       theme: ThemeApp().light,
       darkTheme: ThemeApp().dark,
