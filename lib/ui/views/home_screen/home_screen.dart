@@ -69,7 +69,7 @@ class HomeScreen extends StatelessWidget {
             },
             onClickMoreOptions: (todoId) {
               bottomSheet(
-                height: 150,
+                heightFactor: 17,
                 context: context,
                 children: <Widget>[
                   ButtonActionBottomSheet(

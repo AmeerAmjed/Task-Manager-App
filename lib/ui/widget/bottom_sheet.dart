@@ -6,7 +6,8 @@ import 'package:task_manager/utils/horizontal_space.dart';
 bottomSheet({
   required BuildContext context,
   required List<Widget> children,
-  double height = 250.0,
+  required double heightFactor,
+  bool isUseWithKeyboard = false,
 }) {
   showModalBottomSheet<void>(
     context: context,
@@ -21,22 +22,70 @@ bottomSheet({
     ),
     builder: (BuildContext context) {
       return Container(
-        height: height,
         margin: EdgeInsets.only(
           right: Dimens.spacing16,
           left: Dimens.spacing16,
-          bottom: (MediaQuery.of(context).viewInsets.bottom - 50.0)
-              .abs()
-              .toDouble(),
+          bottom: isUseWithKeyboard
+              ? ((MediaQuery.of(context).viewInsets.bottom + 60)
+                  .abs()
+                  .toDouble())
+              : .0,
         ),
         width: double.infinity,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const _DividerBottomSheet(),
-            ...children,
-          ],
+        child: FractionallySizedBox(
+          heightFactor: (heightFactor / 100),
+          // alignment: Alignment.center,
+          child: Column(
+            // crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const _DividerBottomSheet(),
+              ...children,
+            ],
+          ),
         ),
+      );
+    },
+  );
+}
+
+bottomSheetWithKeyboard({
+  required BuildContext context,
+  required List<Widget> children,
+  double height = 250.0,
+}) {
+  showModalBottomSheet<void>(
+    context: context,
+    isScrollControlled: true,
+    useSafeArea: true,
+    backgroundColor: Theme.of(context).colorScheme.background,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.only(
+        topRight: Radius.circular(Dimens.radius16),
+        topLeft: Radius.circular(Dimens.radius16),
+      ),
+    ),
+    builder: (BuildContext context) {
+      return Stack(
+        children: [
+          Container(
+            height: height,
+            margin: EdgeInsets.only(
+              right: Dimens.spacing16,
+              left: Dimens.spacing16,
+              bottom: (MediaQuery.of(context).viewInsets.bottom - 60.0)
+                  .abs()
+                  .toDouble(),
+            ),
+            width: double.infinity,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const _DividerBottomSheet(),
+                ...children,
+              ],
+            ),
+          )
+        ],
       );
     },
   );

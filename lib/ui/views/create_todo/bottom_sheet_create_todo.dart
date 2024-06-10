@@ -11,7 +11,7 @@ import 'package:task_manager/ui/widget/loading_indicator.dart';
 void bottomSheetCreateTodo(
   BuildContext context,
 ) {
-  bottomSheet(
+  bottomSheetWithKeyboard(
     context: context,
     height: 245.0,
     children: <Widget>[

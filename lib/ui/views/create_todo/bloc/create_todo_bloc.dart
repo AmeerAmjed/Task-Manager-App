@@ -54,9 +54,9 @@ class CreateTodoBloc extends Bloc<CreateTodoEvent, CreateTodoState>
     }
   }
 
-  @override
-  Future<void> close() {
-    todoTitle.dispose();
-    return super.close();
-  }
+  // @override
+  // Future<void> close() {
+  //   todoTitle.dispose();
+  //   return super.close();
+  // }
 }

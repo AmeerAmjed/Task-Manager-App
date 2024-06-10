@@ -43,7 +43,7 @@ class TodosSavedScreen extends StatelessWidget {
               todos: state.todos,
               onClickMoreOptions: (int todoId) {
                 bottomSheet(
-                  height: 80,
+                  heightFactor: 80,
                   context: context,
                   children: <Widget>[
                     ButtonActionBottomSheet(
