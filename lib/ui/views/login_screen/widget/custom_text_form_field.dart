@@ -10,9 +10,11 @@ class CustomTextFormField extends StatelessWidget {
     required this.controller,
     this.textInputAction = TextInputAction.next,
     this.keyboardType = TextInputType.text,
+    this.isPassword = false,
   });
 
   final String label;
+  final bool isPassword;
   final TextEditingController controller;
   final String? Function(String?)? validator;
   final TextInputAction textInputAction;
@@ -24,6 +26,7 @@ class CustomTextFormField extends StatelessWidget {
     return TextFormField(
       controller: controller,
       validator: validator,
+      obscureText: isPassword,
       textInputAction: textInputAction,
       keyboardType: keyboardType,
       onFieldSubmitted: onFieldSubmitted,

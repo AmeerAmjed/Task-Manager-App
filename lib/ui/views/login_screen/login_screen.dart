@@ -17,71 +17,79 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final bloc = context.read<LoginScreenBloc>();
     return Scaffold(
+      appBar: AppBar(
+        scrolledUnderElevation: 0.0,
+      ),
       body: SafeArea(
         child: Form(
           key: bloc.formLoginKey,
-          child: Container(
-            margin: const EdgeInsets.symmetric(horizontal: Dimens.spacing16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                const VerticalSpace96(),
-                Text(
-                  'Login',
-                  style: Theme.of(context).textTheme.headlineLarge,
-                ),
-                Text(
-                  'Please sing in to continue.',
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-                const VerticalSpace45(),
-                CustomTextFormField(
-                  label: 'User Name',
-                  controller: bloc.usernameController,
-                  validator: (username) =>
-                      bloc.checkValidateUserName(username).message,
-                ),
-                const VerticalSpace16(),
-                CustomTextFormField(
-                  label: 'Password',
-                  controller: bloc.passwordController,
-                  validator: (password) =>
-                      bloc.checkValidatePassword(password).message,
-                  textInputAction: TextInputAction.done,
-                  onFieldSubmitted: (_) {
-                    bloc.add(Submitted());
-                  },
-                ),
-                BlocConsumer<LoginScreenBloc, LoginScreenUiState>(
-                  listener: (context, state) {
-                    if (state.isLoginSuccess) {
-                      toast(
-                        "Login Success",
-                        backgroundColor: Theme.of(context).colorScheme.primary,
-                        textColor: Theme.of(context).colorScheme.onPrimary,
+          child: SingleChildScrollView(
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: Dimens.spacing16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  const VerticalSpace96(),
+                  Text(
+                    'Login',
+                    style: Theme.of(context).textTheme.headlineLarge,
+                  ),
+                  Text(
+                    'Please sing in to continue.',
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                  const VerticalSpace45(),
+                  CustomTextFormField(
+                    label: 'User Name',
+                    controller: bloc.usernameController,
+                    validator: (username) =>
+                        bloc.checkValidateUserName(username).message,
+                  ),
+                  const VerticalSpace16(),
+                  CustomTextFormField(
+                    label: 'Password',
+                    controller: bloc.passwordController,
+                    validator: (password) =>
+                        bloc.checkValidatePassword(password).message,
+                    textInputAction: TextInputAction.done,
+                    keyboardType: TextInputType.visiblePassword,
+                    isPassword: true,
+                    onFieldSubmitted: (_) {
+                      bloc.add(Submitted());
+                    },
+                  ),
+                  BlocConsumer<LoginScreenBloc, LoginScreenUiState>(
+                    listener: (context, state) {
+                      if (state.isLoginSuccess) {
+                        toast(
+                          "Login Success",
+                          backgroundColor:
+                              Theme.of(context).colorScheme.primary,
+                          textColor: Theme.of(context).colorScheme.onPrimary,
+                        );
+                        context.go(homeRoute.path);
+                      } else if (state.isLoginFailed) {
+                        toast(
+                          state.errorMessage!,
+                          backgroundColor:
+                              Theme.of(context).colorScheme.errorContainer,
+                          textColor: Theme.of(context).colorScheme.onPrimary,
+                        );
+                      }
+                    },
+                    builder: (context, state) {
+                      return CustomButton(
+                        label: 'Submit',
+                        isLoading: state.isLoading,
+                        onPressed: () {
+                          bloc.add(Submitted());
+                        },
                       );
-                      context.go(homeRoute.path);
-                    } else if (state.isLoginFailed) {
-                      toast(
-                        state.errorMessage!,
-                        backgroundColor:
-                            Theme.of(context).colorScheme.errorContainer,
-                        textColor: Theme.of(context).colorScheme.onPrimary,
-                      );
-                    }
-                  },
-                  builder: (context, state) {
-                    return CustomButton(
-                      label: 'Submit',
-                      isLoading: state.isLoading,
-                      onPressed: () {
-                        bloc.add(Submitted());
-                      },
-                    );
-                  },
-                ),
-              ],
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ),
