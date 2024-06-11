@@ -27,7 +27,7 @@ class UserLocalDataSourceImpl extends UserTable implements UserLocalDataSource {
   @override
   Future<int> getUserId() {
     return queryById(userIdLocal).then((value) {
-      return UserEntity.fromJson(value.first).id;
+      return UserEntity.fromJson(value.first).userId;
     });
   }
 }
