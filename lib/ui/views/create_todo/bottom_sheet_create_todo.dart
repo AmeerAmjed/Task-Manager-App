@@ -66,6 +66,7 @@ void bottomSheetCreateTodo(
                     createTodoBloc.add(SubmittedCreateTodoEvent());
                   }
                 },
+                isLoading: state.isLoading,
                 label: 'Create',
               )
             ],

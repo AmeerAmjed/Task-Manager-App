@@ -18,6 +18,7 @@ class CustomButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: Dimens.heightButton,
+      width: double.infinity,
       margin: const EdgeInsets.symmetric(
         vertical: Dimens.spacing16,
       ),
