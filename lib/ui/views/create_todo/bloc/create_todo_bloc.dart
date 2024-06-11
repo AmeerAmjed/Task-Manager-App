@@ -6,23 +6,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_manager/di/get_it.dart';
 import 'package:task_manager/domain/usecase/todo_usecase.dart';
 import 'package:task_manager/ui/utils/input_validation.dart';
-import 'package:task_manager/utils/is_form_validated.dart';
 
 part 'create_todo_event.dart';
 part 'create_todo_state.dart';
 
-class CreateTodoBloc extends Bloc<CreateTodoEvent, CreateTodoState>
+class CreateTodoBloc extends Bloc<CreateTodoEvent, CreateTodoUiState>
     with InputValidation {
   final TodoUsease _todoUsease = getIt.get<TodoUsease>();
 
-  final GlobalKey<FormState> formTitleTodoKey = GlobalKey<FormState>();
-  final TextEditingController todoTitle = TextEditingController();
-
-  bool _isCompleted = false;
-
-  bool get isCompleted => _isCompleted;
-
-  CreateTodoBloc() : super(CreateTodoInitial()) {
+  CreateTodoBloc() : super(const CreateTodoInitialState()) {
     on<CreateTodoEvent>((event, emit) async {
       if (event is SubmittedCreateTodoEvent) {
         await _onSubmitted(emit);
@@ -30,33 +22,44 @@ class CreateTodoBloc extends Bloc<CreateTodoEvent, CreateTodoState>
     });
 
     on<OnChangeIsCompleted>((event, emit) async {
-      _isCompleted = event.isCompleted;
-      emit(CheckBoxCompletedState(isCompleted: _isCompleted));
+      emit(state.copyWith(isCompleted: event.isCompleted));
     });
   }
 
-  Future _onSubmitted(Emitter<CreateTodoState> emit) async {
-    if (formTitleTodoKey.isFormValidated()) {
-      emit(LoadingUploadTodo());
-      try {
-        final response = await _todoUsease.createTodo(
-          title: todoTitle.text.trim(),
-          isCompleted: _isCompleted,
+  Future _onSubmitted(Emitter<CreateTodoUiState> emit) async {
+    emit(state.copyWith(isLoading: true));
+
+    try {
+      final response = await _todoUsease.createTodo(
+        title: state.todo.trim(),
+        isCompleted: state.isCompleted,
+      );
+      if (response) {
+        emit(
+          state.copyWith(
+            isLoading: false,
+            isCreateTodoSuccess: true,
+          ),
         );
-        if (response) {
-          emit(IsCreateTodoSuccess());
-        } else {
-          emit(const IsCreateTodoFailed("error"));
-        }
-      } on Exception catch (e) {
-        emit(const IsCreateTodoFailed("error"));
+      } else {
+        emit(
+          state.copyWith(
+            isLoading: false,
+            isCreateTodoSuccess: false,
+            isCreateTodoFailed: true,
+            errorMessage: "error",
+          ),
+        );
       }
+    } on Exception catch (e) {
+      emit(
+        state.copyWith(
+          isLoading: false,
+          isCreateTodoSuccess: false,
+          isCreateTodoFailed: true,
+          errorMessage: e.toString(),
+        ),
+      );
     }
   }
-
-  // @override
-  // Future<void> close() {
-  //   todoTitle.dispose();
-  //   return super.close();
-  // }
 }

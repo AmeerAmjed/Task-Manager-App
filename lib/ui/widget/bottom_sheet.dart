@@ -72,7 +72,7 @@ bottomSheetWithKeyboard({
             margin: EdgeInsets.only(
               right: Dimens.spacing16,
               left: Dimens.spacing16,
-              bottom: (MediaQuery.of(context).viewInsets.bottom - 60.0)
+              bottom: (MediaQuery.of(context).viewInsets.bottom - 80.0)
                   .abs()
                   .toDouble(),
             ),

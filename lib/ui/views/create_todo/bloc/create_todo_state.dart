@@ -1,37 +1,61 @@
 part of 'create_todo_bloc.dart';
 
-abstract class CreateTodoState extends Equatable {
-  const CreateTodoState();
-  
-  @override
-  List<Object> get props => [];
-}
-
 @immutable
-class CreateTodoInitial extends CreateTodoState {}
+class CreateTodoUiState extends Equatable {
+  const CreateTodoUiState({
+    this.errorMessage,
+    required this.todo,
+    required this.isCompleted,
+    required this.isLoading,
+    required this.isCreateTodoSuccess,
+    required this.isCreateTodoFailed,
+  });
 
-@immutable
-class LoadingUploadTodo extends CreateTodoState {}
-
-@immutable
-class IsCreateTodoSuccess extends CreateTodoState {}
-
-@immutable
-class CheckBoxCompletedState extends CreateTodoState {
+  final String todo;
   final bool isCompleted;
+  final bool isLoading;
+  final bool isCreateTodoSuccess;
+  final bool isCreateTodoFailed;
+  final String? errorMessage;
 
-  const CheckBoxCompletedState({required this.isCompleted});
+  CreateTodoUiState copyWith({
+    String? todo,
+    bool? isCompleted,
+    bool? isLoading,
+    bool? isCreateTodoSuccess,
+    bool? isCreateTodoFailed,
+    String? errorMessage,
+  }) {
+    return CreateTodoUiState(
+      todo: todo ?? this.todo,
+      isCompleted: isCompleted ?? this.isCompleted,
+      isLoading: isLoading ?? this.isLoading,
+      isCreateTodoSuccess: isCreateTodoSuccess ?? this.isCreateTodoSuccess,
+      isCreateTodoFailed: isCreateTodoFailed ?? this.isCreateTodoFailed,
+      errorMessage: errorMessage ?? this.errorMessage,
+    );
+  }
 
   @override
-  List<Object> get props => [isCompleted];
+  List<Object?> get props => [
+        todo,
+        isCompleted,
+        isLoading,
+        isCreateTodoSuccess,
+        isCreateTodoFailed,
+        errorMessage,
+      ];
 }
 
 @immutable
-class IsCreateTodoFailed extends CreateTodoState {
-  final String message;
-
-  const IsCreateTodoFailed(this.message);
-
-  @override
-  List<Object> get props => [message];
+class CreateTodoInitialState extends CreateTodoUiState {
+  const CreateTodoInitialState()
+      : super(
+          todo: '',
+          isCompleted: false,
+          isLoading: true,
+          isCreateTodoSuccess: false,
+          isCreateTodoFailed: false,
+          errorMessage: null,
+        );
 }

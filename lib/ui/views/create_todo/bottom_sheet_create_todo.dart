@@ -1,27 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:task_manager/di/get_it.dart';
 import 'package:task_manager/ui/utils/dimens.dart';
 import 'package:task_manager/ui/utils/input_validation.dart';
 import 'package:task_manager/ui/views/create_todo/bloc/create_todo_bloc.dart';
 import 'package:task_manager/ui/views/create_todo/widget/input_create_todo.dart';
 import 'package:task_manager/ui/widget/bottom_sheet.dart';
-import 'package:task_manager/ui/widget/loading_indicator.dart';
+import 'package:task_manager/ui/widget/custom_button.dart';
+import 'package:task_manager/utils/is_form_validated.dart';
 
 void bottomSheetCreateTodo(
   BuildContext context,
 ) {
+  final GlobalKey<FormState> formTitleTodoKey = GlobalKey<FormState>();
+  final TextEditingController todoTitle = TextEditingController();
+
   bottomSheetWithKeyboard(
     context: context,
-    height: 245.0,
+    height: 266.0,
     children: <Widget>[
-      BlocProvider<CreateTodoBloc>(
-        create: (_) => getIt<CreateTodoBloc>(),
-        child: BlocConsumer<CreateTodoBloc, CreateTodoState>(
-          listener: (context, state) {
-            if (state is IsCreateTodoSuccess) {
-              Navigator.of(context).pop();
-              ScaffoldMessenger.of(context).showSnackBar(
+      BlocConsumer<CreateTodoBloc, CreateTodoUiState>(
+        listener: (context, state) {
+          if (state.isCreateTodoSuccess) {
+            Navigator.of(context).pop();
+            ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text("Successfully!"),
                   behavior: SnackBarBehavior.floating,
@@ -37,23 +38,22 @@ void bottomSheetCreateTodo(
                   ),
                 ),
               );
-            } else if (state is IsCreateTodoFailed) {
-              Navigator.of(context).pop();
-              ScaffoldMessenger.of(context).showSnackBar(
+          } else if (state.isCreateTodoFailed) {
+            Navigator.of(context).pop();
+            ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text(state.message),
-                  behavior: SnackBarBehavior.floating,
-                  margin: const EdgeInsets.all(16),
+                content: Text(state.errorMessage ?? ""),
+                behavior: SnackBarBehavior.floating,
+                margin: const EdgeInsets.all(Dimens.spacing16),
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16)),
-                  action: SnackBarAction(
+                  borderRadius: BorderRadius.circular(Dimens.radius16),
+                ),
+                action: SnackBarAction(
                     label: 'Dismiss',
                     disabledTextColor: Colors.white,
                     textColor: Colors.blue,
-                    onPressed: () {
-                      //Do whatever you want
-                    },
-                  ),
+                  onPressed: () {},
+                ),
                 ),
               );
             }
@@ -64,14 +64,14 @@ void bottomSheetCreateTodo(
             return Column(
               children: [
                 Form(
-                  key: createTodoBloc.formTitleTodoKey,
-                  child: InputCreateTodo(
-                    todoTitle: createTodoBloc.todoTitle,
-                    completionCheckbox: Checkbox(
-                        activeColor: Theme.of(context).colorScheme.primary,
-                        value: createTodoBloc.isCompleted,
-                        onChanged: (bool? value) {
-                          if (value != null) {
+                key: formTitleTodoKey,
+                child: InputCreateTodo(
+                  todoTitle: todoTitle,
+                  completionCheckbox: Checkbox(
+                      activeColor: Theme.of(context).colorScheme.primary,
+                      value: state.isCompleted,
+                      onChanged: (bool? value) {
+                        if (value != null) {
                             createTodoBloc.add(
                               OnChangeIsCompleted(isCompleted: value),
                             );
@@ -82,40 +82,18 @@ void bottomSheetCreateTodo(
                         .message,
                   ),
                 ),
-                Container(
-                  height: 45,
-                  margin: const EdgeInsets.symmetric(
-                    horizontal: Dimens.spacing16,
-                  ).add(
-                    const EdgeInsets.only(
-                      top: Dimens.spacing16,
-                    ),
-                  ),
-                  padding: EdgeInsets.zero,
-                  child: TextButton(
-                    onPressed: state is LoadingUploadTodo
-                        ? null
-                        : () {
-                            createTodoBloc.add(SubmittedCreateTodoEvent());
-                          },
-                    child: state is LoadingUploadTodo
-                        ? const LoadingIndicator()
-                        : Text(
-                            'Create',
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium
-                                ?.copyWith(
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-                          ),
-                  ),
-                ),
-              ],
-            );
+              CustomButton(
+                onPressed: () {
+                  if (formTitleTodoKey.isFormValidated()) {
+                    createTodoBloc.add(SubmittedCreateTodoEvent());
+                  }
+                },
+                label: 'Create',
+              )
+            ],
+          );
           },
         ),
-      ),
     ],
   );
 }
