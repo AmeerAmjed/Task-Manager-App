@@ -8,6 +8,7 @@ import 'package:task_manager/ui/views/home_screen/widget/todos_view.dart';
 import 'package:task_manager/ui/views/todos_saved_screen/todos_saved_route.dart';
 import 'package:task_manager/ui/widget/bottom_sheet.dart';
 import 'package:task_manager/ui/widget/error_view.dart';
+import 'package:task_manager/ui/widget/toast.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -38,23 +39,19 @@ class HomeScreen extends StatelessWidget {
         }
 
         if (state.isDeleteTodoSuccess) {
-          Future(() {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text("Succeed delete Todo"),
-              ),
-            );
-          });
+          toast(
+            "Succeed delete Todo",
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            textColor: Theme.of(context).colorScheme.onPrimary,
+          );
         }
 
         if (state.isDeleteTodoFailed) {
-          Future(() {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text("Failed delete Todo"),
-              ),
-            );
-          });
+          toast(
+            state.errorMessage ?? "",
+            backgroundColor: Theme.of(context).colorScheme.error,
+            textColor: Theme.of(context).colorScheme.onError,
+          );
         }
 
         return TodosView(
