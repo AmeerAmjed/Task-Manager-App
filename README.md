@@ -29,4 +29,18 @@ This Task Manager App is built using Flutter to provide an efficient way for use
 This project uses **Clean Architecture**.
 ![image](https://github.com/AmeerAmjed/Task-Manager-App/assets/45900975/1259c0e6-1fc9-4f2d-8b00-a66612e36da5)
 
+## Screenshot
+
+  Home screen                |   Todos saved screen        |   login screen | Create todo
+:---------------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
+![](https://github.com/AmeerAmjed/Task-Manager-App/assets/45900975/07b6b361-ca44-4c94-8e15-ed5e9351bebd)|![](https://github.com/AmeerAmjed/Task-Manager-App/assets/45900975/2d5fffa0-6efc-46b6-a66f-f37c40149472)| ![](https://github.com/AmeerAmjed/Task-Manager-App/assets/45900975/c3478f30-d963-4a8d-952b-a7fb17a080b5) | ![](https://github.com/AmeerAmjed/Task-Manager-App/assets/45900975/1a59f459-6502-4078-b801-3018d702756e) 
+
+## Demo
+[Youtube video](https://www.youtube.com/watch?v=jLFmwojzvDY)
+
+
+
+
+
+
 
