@@ -36,7 +36,16 @@ This project uses **Clean Architecture**.
 ![](https://github.com/AmeerAmjed/Task-Manager-App/assets/45900975/07b6b361-ca44-4c94-8e15-ed5e9351bebd)|![](https://github.com/AmeerAmjed/Task-Manager-App/assets/45900975/2d5fffa0-6efc-46b6-a66f-f37c40149472)| ![](https://github.com/AmeerAmjed/Task-Manager-App/assets/45900975/c3478f30-d963-4a8d-952b-a7fb17a080b5) | ![](https://github.com/AmeerAmjed/Task-Manager-App/assets/45900975/1a59f459-6502-4078-b801-3018d702756e) 
 
 ## Demo
+
+
+<video src="https://github.com/AmeerAmjed/Task-Manager-App/assets/45900975/1ff5fba7-cde7-471b-8ca2-a337b95d6b9e"></video>
+
+
 [Youtube video](https://www.youtube.com/watch?v=jLFmwojzvDY)
+
+
+
+
 
 
 
