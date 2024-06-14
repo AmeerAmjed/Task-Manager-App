@@ -53,7 +53,7 @@ class CreateTodoInitialState extends CreateTodoUiState {
       : super(
           todo: '',
           isCompleted: false,
-          isLoading: true,
+          isLoading: false,
           isCreateTodoSuccess: false,
           isCreateTodoFailed: false,
           errorMessage: null,
