@@ -16,7 +16,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-
+    final homeBloc = context.read<HomeScreenBloc>();
     return Scaffold(
       key: scaffoldKey,
       resizeToAvoidBottomInset: false,
@@ -25,33 +25,37 @@ class HomeScreen extends StatelessWidget {
           context.push(todosSavedRoute.path);
         },
       ),
-      body: BlocBuilder<HomeScreenBloc, HomeScreenUiState>(
-          builder: (BuildContext context, state) {
-        if (state.todos.isEmpty) {
-          if (state.isLoading) {
-            return const ShimmerTodosView();
-          } else if (state.isGetTodosFailed && state.errorMessage != null) {
-            return ErrorView(
+      body: BlocConsumer<HomeScreenBloc, HomeScreenUiState>(
+        listener: (context, state) {
+          if (state.isShowToast) {
+            if (state.isDeleteTodoSuccess) {
+              toast(
+                "Succeed delete Todo",
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                textColor: Theme.of(context).colorScheme.onPrimary,
+              );
+            }
+
+            if (state.isDeleteTodoFailed) {
+              toast(
+                state.errorMessage ?? "Failed to delete Todo",
+                backgroundColor: Theme.of(context).colorScheme.error,
+                textColor: Theme.of(context).colorScheme.onError,
+              );
+            }
+            homeBloc.add(ResetToastEvent());
+          }
+        },
+        builder: (BuildContext context, state) {
+          if (state.todos.isEmpty) {
+            if (state.isLoading) {
+              return const ShimmerTodosView();
+            } else if (state.isGetTodosFailed && state.errorMessage != null) {
+              return ErrorView(
               message: state.errorMessage!,
               onPressed: () {},
             );
           }
-        }
-
-        if (state.isDeleteTodoSuccess) {
-          toast(
-            "Succeed delete Todo",
-            backgroundColor: Theme.of(context).colorScheme.primary,
-            textColor: Theme.of(context).colorScheme.onPrimary,
-          );
-        }
-
-        if (state.isDeleteTodoFailed) {
-          toast(
-            state.errorMessage ?? "",
-            backgroundColor: Theme.of(context).colorScheme.error,
-            textColor: Theme.of(context).colorScheme.onError,
-          );
         }
 
         return TodosView(
@@ -97,8 +101,10 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ],
               );
-            });
-      }),
+            },
+          );
+        },
+      ),
       floatingActionButton: const ButtonAddTodo(),
     );
   }

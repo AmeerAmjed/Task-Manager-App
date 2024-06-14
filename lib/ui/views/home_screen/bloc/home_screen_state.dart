@@ -11,6 +11,7 @@ class HomeScreenUiState extends Equatable {
     required this.isGetTodosFailed,
     required this.isDeleteTodoSuccess,
     required this.isDeleteTodoFailed,
+    required this.isShowToast,
   });
 
   final List<TodoModel> todos;
@@ -24,6 +25,8 @@ class HomeScreenUiState extends Equatable {
   final bool isDeleteTodoSuccess;
   final bool isDeleteTodoFailed;
 
+  final bool isShowToast;
+
   final String? errorMessage;
 
   HomeScreenUiState copyWith({
@@ -35,6 +38,7 @@ class HomeScreenUiState extends Equatable {
     bool? isDeleteTodoSuccess,
     bool? isDeleteTodoFailed,
     String? errorMessage,
+    bool? isShowToast,
   }) {
     return HomeScreenUiState(
       todos: todos ?? this.todos,
@@ -45,6 +49,7 @@ class HomeScreenUiState extends Equatable {
       isDeleteTodoSuccess: isDeleteTodoSuccess ?? this.isDeleteTodoSuccess,
       isDeleteTodoFailed: isDeleteTodoFailed ?? this.isDeleteTodoFailed,
       errorMessage: errorMessage ?? this.errorMessage,
+      isShowToast: isShowToast ?? this.isShowToast,
     );
   }
 
@@ -58,6 +63,7 @@ class HomeScreenUiState extends Equatable {
         isDeleteTodoSuccess,
         isDeleteTodoFailed,
         errorMessage,
+        isShowToast,
       ];
 }
 
@@ -71,6 +77,7 @@ class HomeScreenInitialUiState extends HomeScreenUiState {
           isGetTodosFailed: false,
           isDeleteTodoSuccess: false,
           isDeleteTodoFailed: false,
+          isShowToast: false,
           errorMessage: null,
         );
 }

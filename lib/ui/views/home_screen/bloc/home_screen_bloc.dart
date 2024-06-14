@@ -63,6 +63,14 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenUiState> {
       },
     );
 
+    on<ResetToastEvent>((event, emit) {
+      emit(state.copyWith(
+        isShowToast: false,
+        isDeleteTodoSuccess: false,
+        isDeleteTodoFailed: false,
+      ));
+    });
+
     _scrollListener();
   }
 
@@ -129,7 +137,9 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenUiState> {
     required bool isCompleted,
   }) async {
     return await todoUsease.updateTodoIsCompleted(
-        todoId: todoId, isCompleted: isCompleted);
+      todoId: todoId,
+      isCompleted: isCompleted,
+    );
   }
 
   _updateTodosState({
@@ -161,12 +171,16 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenUiState> {
     if (result) {
       emit(
         state.copyWith(
+          isShowToast: true,
           isDeleteTodoSuccess: true,
           todos: _removeTodoById(event.todoId),
         ),
       );
     } else {
-      emit(state.copyWith(isDeleteTodoFailed: true));
+      emit(state.copyWith(
+        isShowToast: true,
+        isDeleteTodoFailed: true,
+      ));
     }
   }
 

@@ -38,3 +38,5 @@ class OnChangedItemTodoCompletedEvent extends HomeScreenEvent {
 
   List<Object?> get props => [todoId, isCompleted];
 }
+
+class ResetToastEvent extends HomeScreenEvent {}
