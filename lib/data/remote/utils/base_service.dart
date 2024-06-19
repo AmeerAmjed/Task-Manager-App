@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:task_manager/data/remote/utils/auth_interceptor.dart';
 import 'package:task_manager/data/remote/utils/todo_api_endpoint.dart';
@@ -27,34 +29,41 @@ abstract class BaseApiService with TodoApiEndpoint {
     T Function(Map<String, dynamic>) fromJson,
   ) async {
     try {
+      print("tryRequest");
+
       Response response = await request;
-      if (isRequestSuccess(response)) {
+      print("response ${response.statusCode}");
+
+      if (_isRequestSuccess(response)) {
         if (response.data != null && (response.data is Map<String, dynamic>)) {
+          print(" data is convert to");
           return fromJson(response.data);
         } else {
+          print("Body is null ");
           throw const BadRequestException(message: "Body is null");
         }
       } else {
+        print("Request not Success ");
         throw const BadRequestException();
       }
-    } catch (e) {
-      if (e is DioException) {
-        if (e.response != null) {
-          if (e.response?.statusCode == 400) {
-            throw const BadRequestException(message: "Invalid credentials");
-          } else {
-            throw ServerException(
-                message: e.response?.data.toString() ?? "Unknown error");
-          }
+    } on DioException catch (e) {
+      print("DioException ");
+      if (e.response != null) {
+        if (e.response?.statusCode == HttpStatus.badRequest) {
+          throw const BadRequestException(message: "Invalid credentials");
         } else {
-          throw ServerException(message: e.message ?? "Unknown error");
+          throw ServerException(
+              message: e.response?.data.toString() ?? "Unknown error");
         }
       } else {
-        throw ServerException(message: e.toString());
+        throw ServerException(message: e.message ?? "Unknown error");
       }
+    } on ServerException catch (e) {
+      print("ServerException ");
+      throw const ServerException(message: "Unknown error");
     }
   }
 
-  bool isRequestSuccess(Response response) =>
+  bool _isRequestSuccess(Response response) =>
       response.statusCode != null && response.statusCode! ~/ 100 == 2;
 }
