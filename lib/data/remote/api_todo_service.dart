@@ -23,44 +23,32 @@ class ApiToDoServiceImpl extends BaseApiService implements ApiToDoService {
   ApiToDoServiceImpl(Dio client) : super(client: client);
 
   @override
-  Future<TodosResponse> getTodos(
-      {required int skip, required int limit}) async {
-    try {
-      final response = await client.get(
-        '$baseUrl/todos',
-        queryParameters: {
-          "skip": skip,
-          "limit": limit,
-        },
-      );
-
-      if (response.statusCode == 200) {
-        return TodosResponse.fromJson(response.data);
-      } else {
-        throw Exception('Failed to load todos');
-      }
-    } catch (e) {
-      throw Exception('Failed to load todos: $e');
-    }
+  Future<TodosResponse> getTodos({
+    required int skip,
+    required int limit,
+  }) async {
+    return await tryRequest<TodosResponse>(
+      () {
+        return client.get(
+          '$baseUrl/todos',
+          queryParameters: {
+            "skip": skip,
+            "limit": limit,
+          },
+        );
+      },
+      (json) => TodosResponse.fromJson(json),
+    );
   }
 
   @override
   Future<DeleteTodoResponse> deleteTodo({required int todoId}) async {
-    try {
-      final response = await client.delete('$baseUrl/todos/$todoId');
-
-      if (response.statusCode == 200) {
-        if (response.data != null) {
-          return DeleteTodoResponse.fromJson(response.data);
-        } else {
-          throw Exception('Failed to delete todo');
-        }
-      } else {
-        throw Exception('Failed to delete todo');
-      }
-    } catch (e) {
-      throw Exception('Failed to delete todo: $e');
-    }
+    return await tryRequest<DeleteTodoResponse>(
+      () {
+        return client.delete('$baseUrl/todos/$todoId');
+      },
+      (json) => DeleteTodoResponse.fromJson(json),
+    );
   }
 
   @override
