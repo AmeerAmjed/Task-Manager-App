@@ -8,10 +8,10 @@ import 'package:task_manager/utils/handle_error.dart';
 
 import 'api_authentication_service_test.mocks.dart';
 
-@GenerateMocks([Dio, ApiAuthenticationServiceImpl])
+@GenerateMocks([Dio])
 void main() {
   late MockDio client;
-  late ApiAuthenticationServiceImpl apiService;
+  late ApiAuthenticationService apiService;
   const fakeLoginSuccessResponse = {
     "id": 30,
     "username": "AMeero",
@@ -25,6 +25,10 @@ void main() {
 
   setUp(() {
     client = MockDio();
+
+    final fakeInterceptors = Interceptors();
+    when(client.interceptors).thenReturn(fakeInterceptors);
+
     apiService = ApiAuthenticationServiceImpl(client: client);
   });
 
