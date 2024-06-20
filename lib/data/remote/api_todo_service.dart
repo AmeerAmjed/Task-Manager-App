@@ -66,10 +66,12 @@ class ApiToDoServiceImpl extends BaseApiService implements ApiToDoService {
   @override
   Future<bool> createTodo({required CreateTodoParams todo}) async {
     return await tryRequest<TodoDto>(
-      client.post(
-        '/todos/add',
-        data: todo.toBody(),
-      ),
+      () {
+        return client.post(
+          '/todos/add',
+          data: todo.toBody(),
+        );
+      },
       (json) => TodoDto.fromJson(json),
     ).then((value) {
       return true;
@@ -82,12 +84,14 @@ class ApiToDoServiceImpl extends BaseApiService implements ApiToDoService {
     required bool isCompleted,
   }) async {
     return await tryRequest<TodoResponse>(
-      client.put(
-        '/todos/$todoId',
-        data: {
-          "completed": isCompleted,
-        },
-      ),
+      () {
+        return client.put(
+          '/todos/$todoId',
+          data: {
+            "completed": isCompleted,
+          },
+        );
+      },
       (json) => TodoResponse.fromJson(json),
     ).then((todo) => todo.id == todoId);
   }

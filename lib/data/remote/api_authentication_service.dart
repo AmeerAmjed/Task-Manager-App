@@ -18,10 +18,12 @@ class ApiAuthenticationServiceImpl extends BaseApiService
     required String password,
   }) async {
     return await tryRequest(
-      client.post(
-        '$baseUrl/auth/login',
-        data: {"username": username, "password": password},
-      ),
+      () {
+        return client.post(
+          '/auth/login',
+          data: {"username": username, "password": password},
+        );
+      },
       (body) => LoginResponse.fromJson(body),
     );
   }
@@ -29,7 +31,9 @@ class ApiAuthenticationServiceImpl extends BaseApiService
   @override
   Future<LoginResponse> refreshToken() async {
     return await tryRequest(
-      client.post('/auth/refresh'),
+      () {
+        return client.post('/auth/refresh');
+      },
       (body) => LoginResponse.fromJson(body),
     );
   }
