@@ -12,7 +12,7 @@ import 'package:task_manager/domain/model/todo_model.dart';
 import 'package:task_manager/domain/repository/todo_repository.dart';
 
 class TodoRepositoryImpl extends TodoRepository {
-  final ApiToDoService api = ApiToDoServiceImpl(getIt<Dio>());
+  final ApiToDoService api = ApiToDoServiceImpl(client: getIt<Dio>());
   final LocalTodoDataSource localTodoDataSource =
       getIt.get<LocalTodoDataSource>();
 

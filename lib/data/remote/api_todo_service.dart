@@ -20,8 +20,8 @@ abstract class ApiToDoService {
 }
 
 class ApiToDoServiceImpl extends BaseApiService implements ApiToDoService {
-  ApiToDoServiceImpl(Dio client) : super(client: client);
-
+  // ApiToDoServiceImpl(Dio client) : super(client: client);
+  ApiToDoServiceImpl({required super.client});
   @override
   Future<TodosResponse> getTodos({
     required int skip,
@@ -30,7 +30,7 @@ class ApiToDoServiceImpl extends BaseApiService implements ApiToDoService {
     return await tryRequest<TodosResponse>(
       () {
         return client.get(
-          '$baseUrl/todos',
+          '/todos',
           queryParameters: {
             "skip": skip,
             "limit": limit,

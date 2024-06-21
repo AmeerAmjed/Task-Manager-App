@@ -25,7 +25,8 @@ class UnauthorizedException extends ServerException {
 }
 
 class NotFoundException extends ServerException {
-  const NotFoundException() : super(message: "Not Found");
+  final String message;
+  const NotFoundException(this.message) : super(message: message);
 }
 
 class InternalServerException extends ServerException {

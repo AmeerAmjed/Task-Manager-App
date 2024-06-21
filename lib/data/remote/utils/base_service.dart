@@ -35,6 +35,8 @@ abstract class BaseApiService with TodoApiEndpoint {
         } else {
           throw const BadRequestException(message: "Body is null");
         }
+      } else if (response.statusCode == HttpStatus.notFound) {
+        throw NotFoundException(response.data['message'] ?? "Not Found");
       } else {
         throw const BadRequestException();
       }
@@ -49,8 +51,10 @@ abstract class BaseApiService with TodoApiEndpoint {
       } else {
         throw ServerException(message: e.message ?? "Unknown error");
       }
+    } on NotFoundException catch (e) {
+      throw NotFoundException(e.message);
     } on ServerException catch (e) {
-      throw const ServerException(message: "Unknown error");
+      throw ServerException(message: e.message);
     }
   }
 
