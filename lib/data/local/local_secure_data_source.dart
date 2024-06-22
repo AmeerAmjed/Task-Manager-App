@@ -3,9 +3,14 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 abstract class LocalSecureDataSource {
   Future<String?> getToken();
 
-  Future<void> saveToken(String token);
+  Future<String?> getRefreshToken();
 
-  Future<void> deleteToken();
+  Future<void> saveTokens({
+    required String token,
+    required String refreshToken,
+  });
+
+  Future<void> deleteTokens();
 }
 
 class LocalSecureDataSourceImpl implements LocalSecureDataSource {
@@ -19,14 +24,25 @@ class LocalSecureDataSourceImpl implements LocalSecureDataSource {
   }
 
   @override
-  Future<void> saveToken(String token) async {
-    await _secureStorage.write(key: _token, value: token);
+  Future<String?> getRefreshToken() {
+    return _secureStorage.read(key: _refreshToken);
   }
 
   @override
-  Future<void> deleteToken() async {
+  Future<void> saveTokens({
+    required String token,
+    required String refreshToken,
+  }) async {
+    await _secureStorage.write(key: _token, value: token);
+    await _secureStorage.write(key: _refreshToken, value: token);
+  }
+
+  @override
+  Future<void> deleteTokens() async {
     await _secureStorage.delete(key: _token);
+    await _secureStorage.delete(key: _refreshToken);
   }
 
   static const _token = "token";
+  static const _refreshToken = "refreshToken";
 }

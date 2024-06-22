@@ -39,4 +39,8 @@ void setupDataModule() {
   getIt.registerLazySingleton<LocalSecureDataSource>(
     () => LocalSecureDataSourceImpl(getIt.get<FlutterSecureStorage>()),
   );
+
+  getIt.registerLazySingleton<AuthInterceptor>(
+    () => AuthInterceptor(getIt.get<Dio>()),
+  );
 }

@@ -28,7 +28,7 @@ class AuthenticationRepositoryImpl extends LocalSecureDataSourceImpl
         .then((user) {
       print("object $user");
       userLocalDataSource.saveUser(user.toUserModel().toUserEntity());
-      saveToken(user.token);
+      saveTokens(token: user.token, refreshToken: user.refreshToken);
       return user.toUserModel();
     });
   }

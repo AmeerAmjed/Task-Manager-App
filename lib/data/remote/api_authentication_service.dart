@@ -1,11 +1,12 @@
 import 'package:task_manager/data/remote/response/login_response.dart';
+import 'package:task_manager/data/remote/response/tokens_response.dart';
 import 'package:task_manager/data/remote/utils/base_service.dart';
 
 abstract class ApiAuthenticationService {
   Future<LoginResponse> login(
       {required String username, required String password});
 
-  Future<LoginResponse> refreshToken();
+  Future<TokensResponse> refreshToken(String token);
 }
 
 class ApiAuthenticationServiceImpl extends BaseApiService
@@ -29,12 +30,15 @@ class ApiAuthenticationServiceImpl extends BaseApiService
   }
 
   @override
-  Future<LoginResponse> refreshToken() async {
+  Future<TokensResponse> refreshToken(String token) async {
     return await tryRequest(
       () {
-        return client.post('/auth/refresh');
+        return client.post(
+          '/auth/refresh',
+          data: {"refreshToken": token},
+        );
       },
-      (body) => LoginResponse.fromJson(body),
+      (body) => TokensResponse.fromJson(body),
     );
   }
 }

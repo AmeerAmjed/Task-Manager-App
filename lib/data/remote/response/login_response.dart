@@ -14,6 +14,7 @@ class LoginResponse {
   final String gender;
   final String image;
   final String token;
+  final String refreshToken;
 
   const LoginResponse({
     required this.id,
@@ -24,6 +25,7 @@ class LoginResponse {
     required this.gender,
     required this.image,
     required this.token,
+    required this.refreshToken,
   });
 
   factory LoginResponse.fromJson(Map<String, dynamic> json) =>
