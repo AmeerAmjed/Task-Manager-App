@@ -34,7 +34,7 @@ class LocalSecureDataSourceImpl implements LocalSecureDataSource {
     required String refreshToken,
   }) async {
     await _secureStorage.write(key: _token, value: token);
-    await _secureStorage.write(key: _refreshToken, value: token);
+    await _secureStorage.write(key: _refreshToken, value: refreshToken);
   }
 
   @override
