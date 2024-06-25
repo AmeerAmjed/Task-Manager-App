@@ -1,7 +1,9 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:task_manager/data/remote/utils/auth_interceptor.dart';
 import 'package:task_manager/data/remote/utils/todo_api_endpoint.dart';
+import 'package:task_manager/di/get_it.dart';
 import 'package:task_manager/utils/handle_error.dart';
 
 abstract class BaseApiService with TodoApiEndpoint {
@@ -10,8 +12,8 @@ abstract class BaseApiService with TodoApiEndpoint {
   BaseApiService({required this.client}) {
     client.options = BaseOptions(
       baseUrl: baseUrl,
-      connectTimeout: const Duration(minutes: 1),
       receiveTimeout: const Duration(minutes: 1),
+      sendTimeout: const Duration(minutes: 1),
       responseType: ResponseType.json,
       contentType: Headers.jsonContentType,
       headers: {
@@ -19,7 +21,7 @@ abstract class BaseApiService with TodoApiEndpoint {
       },
     );
 
-    //client.interceptors.add(AuthInterceptor());
+    client.interceptors.add(getIt.get<AuthInterceptor>());
     client.interceptors.add(LogInterceptor(responseBody: true));
   }
 
