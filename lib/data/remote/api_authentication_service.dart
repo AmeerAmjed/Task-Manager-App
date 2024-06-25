@@ -22,7 +22,10 @@ class ApiAuthenticationServiceImpl extends BaseApiService
       () {
         return client.post(
           '/auth/login',
-          data: {"username": username, "password": password},
+          data: {
+            "username": username,
+            "password": password,
+          },
         );
       },
       (body) => LoginResponse.fromJson(body),
@@ -31,6 +34,7 @@ class ApiAuthenticationServiceImpl extends BaseApiService
 
   @override
   Future<TokensResponse> refreshToken(String token) async {
+    print("refreshToken get");
     return await tryRequest(
       () {
         return client.post(

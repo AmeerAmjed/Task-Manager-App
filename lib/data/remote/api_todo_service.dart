@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:task_manager/data/remote/model/create_todo_params.dart';
 import 'package:task_manager/data/remote/response/delete_todo_response.dart';
 import 'package:task_manager/data/remote/response/todo_dto.dart';
@@ -20,7 +19,6 @@ abstract class ApiToDoService {
 }
 
 class ApiToDoServiceImpl extends BaseApiService implements ApiToDoService {
-  // ApiToDoServiceImpl(Dio client) : super(client: client);
   ApiToDoServiceImpl({required super.client});
   @override
   Future<TodosResponse> getTodos({
@@ -30,7 +28,7 @@ class ApiToDoServiceImpl extends BaseApiService implements ApiToDoService {
     return await tryRequest<TodosResponse>(
       () {
         return client.get(
-          '/todos',
+          '/auth/todos',
           queryParameters: {
             "skip": skip,
             "limit": limit,
